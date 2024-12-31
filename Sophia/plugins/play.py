@@ -63,11 +63,9 @@ async def make_queue(chat_id):
         last_key = queue_id[chat_id][-1] if queue_id[chat_id] else 0
         new_key = last_key + 1
         queue_id[chat_id].append(new_key)
-        logging.info(f"Debug make_queue: last_key={last_key}, new_key={new_key}, queue_id={queue_id}")
         return new_key
     else:
         queue_id[chat_id] = [1]
-        logging.info(f"Debug make_queue: Initialized queue_id for chat_id {chat_id}, queue_id={queue_id}")
         return 1
 
 async def play_filter(_, client, message):
@@ -77,13 +75,10 @@ async def play_filter(_, client, message):
         if message.reply_to_message.audio or message.reply_to_message.video: pass
         else: return True
     if is_playing.get(message.chat.id) or (queue_id.get(message.chat.id) and len(queue_id[message.chat.id]) != 0):
-        logging.info(f"Debug play_filter: is_playing={is_playing}, queue_id={queue_id}")
         msg = await message.reply("Successfully added your query in queue! ✅")
         id = await make_queue(message.chat.id)
-        logging.info(f"Debug play_filter: Created queue with id={id}")
         while queue_id[message.chat.id][0] != id:
             if id not in queue_id[message.chat.id]:
-                logging.info(f"Debug play_filter: id={id} not in queue_id={queue_id[message.chat.id]}")
                 return False
             await asyncio.sleep(0.3)
         try: await msg.delete()
@@ -93,9 +88,9 @@ async def play_filter(_, client, message):
         return True
     else:
         id = await make_queue(message.chat.id)
-        logging.info(f"Debug play_filter: Created queue with id={id}")
         if id == 1:
             return True
+            
 @bot.on_message(filters.command(["play", "sp"], prefixes=PLAYPREFIXES) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
 async def play(_, message):
     global vcInfo, is_playing, num_queues
@@ -305,11 +300,9 @@ async def skip(_, message):
         try:
             if len(queue_id.get(message.chat.id)) > 1:
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-                logging.info("Debug play.py 304: queue skipped")
             else:
                 await message.reply("**ℹ️ No more queues in the chat leaving...**")
                 await SophiaVC.leave_call(message.chat.id)
-                logging.info(f"Debug play.py 307: looks like no more queue in this chat leaving.. {queue_id[chat_id]}")
                 vcInfo.pop(message.chat.id, None)
                 try: queue_id[chat_id].remove(queue_id.get(chat_id)[0])
                 except: pass
