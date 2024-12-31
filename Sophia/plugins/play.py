@@ -294,7 +294,7 @@ async def manage_playback(chat_id, title, duration):
 async def skip(_, message):
     global queue_id, vcInfo, num_queues, is_playing
     a = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
-    if not a.status in [ChatMember.ADMINISTRATOR, ChatMember.OWNER] and not any(a.privileges.can_manage_video_chats):
+    if a.status in ChatMember.MEMBER or not any(a.privileges.can_manage_video_chats):
         return await message.reply("**You don't have enough admin rights to use this command ❌**")
     chat_id = message.chat.id
     if vcInfo.get(message.chat.id):
