@@ -17,11 +17,11 @@ async def broadcast_all(_, message):
                     SUCCESS += 1
                     await asyncio.sleep(0.5)
                     await Sophia.pin_chat_message(dialog.chat.id, msg.id, disable_notification=True, both_sides=True)
-                    await asyncio.sleep(2) # Controlling Account ban
+                    await asyncio.sleep(2)
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
-        await message.reply(f"**Broadcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Broadcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
     else:
         if len(message.command) < 2:
             return await message.reply_text("➲ Master, Please enter a text to broadcast or reply a message to broadcast.")
@@ -37,7 +37,7 @@ async def broadcast_all(_, message):
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
-        await message.reply(f"**Broadcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Broadcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
 
 @Sophia.on_message(filters.command(["gcast", "groupcast"], prefixes=HANDLER) & filters.me)
 async def GroupCast(_, message):
@@ -55,7 +55,7 @@ async def GroupCast(_, message):
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
-        await message.reply(f"**Groupcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Groupcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
     else:
         if len(message.command) < 2:
             return await message.reply_text("➲ Master, Please enter a text to Groupcasting or reply a message to Groupcasting.")
@@ -71,7 +71,7 @@ async def GroupCast(_, message):
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
-        await message.reply(f"**Groupcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Groupcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
 
 @Sophia.on_message(filters.command(["ucast", "usercast"], prefixes=HANDLER) & filters.me)
 async def UserCast(_, message):
@@ -86,7 +86,7 @@ async def UserCast(_, message):
                     await asyncio.sleep(2)
                 except Exception as e:
                     FAILED += 1
-        await message.reply(f"**Usercast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Usercast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
     else:
         if len(message.command) < 2:
             return await message.reply_text("➲ Master, Please enter a text to Usercasting or reply a message to Usercasting.")
@@ -99,7 +99,7 @@ async def UserCast(_, message):
                     await asyncio.sleep(2)
                 except Exception as e:
                     FAILED += 1
-        await message.reply(f"**Usercast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Usercast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
 
 @Sophia.on_message(filters.command(["chcast", "ccast", "channelcast"], prefixes=HANDLER) & filters.me)
 async def Channelcast(_, message):
@@ -114,7 +114,7 @@ async def Channelcast(_, message):
                     await asyncio.sleep(2)
                 except Exception as e:
                     FAILED += 1
-        await message.reply(f"**Channelcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Channelcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
     else:
         if len(message.command) < 2:
             return await message.reply_text("➲ Master, Please enter a text to Channelcasting or reply a message to Channelcasting.")
@@ -127,7 +127,7 @@ async def Channelcast(_, message):
                     await asyncio.sleep(2)
                 except Exception as e:
                     FAILED += 1
-        await message.reply(f"**Channelcast Complete**\n\nSUCCESS = {SUCCESS}\nFAILED = {FAILED}")
+        await message.reply(f"**Channelcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
 
 MOD_NAME = "Broadcast"
 MOD_HELP = """.bcast <text/reply a msg> - To send that message to all groups & users in your account.
