@@ -13,7 +13,7 @@ async def pin_message(_, message):
             await message.delete()
         except Exception as e:
             if str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""":
-                await message.edit("❌ You need admin access to do this!")
+                await message.reply("❌ You need admin access to do this!")
             elif str(e).startswith("""Telegram says: [420 FLOOD_WAIT_X] - A wait of"""):
                 sec = int(e.split()[8])
                 await asyncio.sleep(sec)
