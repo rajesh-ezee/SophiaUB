@@ -12,6 +12,7 @@ commands:
     - "ffmpeg"
     - "build-essential"
     - "libffi-dev"
+    - "gcc"
   start:
     - "python3 -m Sophia"
 
