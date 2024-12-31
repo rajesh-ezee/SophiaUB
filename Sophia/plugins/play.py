@@ -11,6 +11,7 @@ from youtube_search import YoutubeSearch
 from yt_dlp import YoutubeDL
 from pytgcalls.types import MediaStream
 from Sophia.Database.play import *
+from pyrogram.types import *
 
 vcInfo = {}
 PLAYPREFIXES = HANDLER
@@ -287,14 +288,14 @@ async def manage_playback(chat_id, title, duration):
             if not queue_id.get(chat_id):
                 await SophiaVC.leave_call(chat_id)
                 vcInfo.pop(chat_id, None)
-                await Sophia.send_message(chat_id, "**ℹ️ No more queues in the chat leaving...**")
         except Exception as e: logging.error(e)
 
 @bot.on_message(filters.command("skip", prefixes=PLAYPREFIXES) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
 async def skip(_, message):
     global queue_id, vcInfo, num_queues, is_playing
-    try: await message.delete()
-    except: pass
+    a = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
+    if not a.status in [ChatMember.ADMINISTRATOR, ChatMember.OWNER] and not any(a.privileges.can_manage_video_chats):
+        return await message.reply("**You don't have enough admin rights to use this command ❌**")
     chat_id = message.chat.id
     if vcInfo.get(message.chat.id):
         try:
