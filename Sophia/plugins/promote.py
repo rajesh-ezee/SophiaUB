@@ -74,7 +74,7 @@ async def promote(_, message):
         type = ''
     try:
         await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-        if title: await Sophia.set_administrator_title(message.chat.id, user_id, title)
+        if title: await Sophia.set_administrator_title(message.chat.id, user_id, title[:15])
         await message.reply(f"Successfuly {type}promoted!")
     except Exception as e:
         logging.error(e)
