@@ -84,8 +84,9 @@ async def eval(client, message):
 
 
 async def aexec(code, client, message):
+    m, ctx, r, from_user = message, message, message.reply_to_message, message.from_user
     exec(
-        "async def __aexec(client, message): "
+        "async def __run_code_otazuki_sophia(client, message, m, ctx, r, from_user): "
         + "".join(f"\n {l_}" for l_ in code.split("\n"))
     )
-    return await locals()["__aexec"](client, message)
+    return await locals()["__run_code_otazuki_sophia"](client, message, m, ctx, r, from_user)
