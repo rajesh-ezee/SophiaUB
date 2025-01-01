@@ -24,7 +24,7 @@ async def promote(_, message):
     you = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
     if target.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
         return await message.reply("**ℹ️ The user is admin/owner already!**")
-    if not you.stats in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER] or not you.privileges.can_promote_members:
+    if not you.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER] or not you.privileges.can_promote_members:
         return await message.reply("**ℹ️ You don't have enough admin rights to do this!**")
     if message.text[1:].startswith('f'):
         privileges = ChatPrivileges(
