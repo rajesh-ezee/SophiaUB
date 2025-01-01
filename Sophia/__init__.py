@@ -52,7 +52,6 @@ API_HASH = os.environ.get("API_HASH") or VAR_API_HASH
 HANDLER = [".","~","!","$","#"]
 LOG_CHANNEL = -1002010994783
 TOKEN = os.environ.get("TOKEN") or VAR_TOKEN
-SUDO_USERS = os.environ.get("SUDO_USERS") or VAR_SUDO_USERS or []
 REPO_URL = os.environ.get("YOUR_REPO_LINK") or VAR_REPO_URL
 MY_VERSION = 1.2
 bot_start_time = datetime.now()
