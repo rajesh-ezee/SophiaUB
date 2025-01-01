@@ -34,9 +34,9 @@ def fetch_data(query: str, message: str) -> tuple:
 
 @app.on_message(filters.command(["chat", "gpt"], prefixes=HANDLER) & filters.user(OWNER_ID))
 async def chatgpt(_: Client, message: Message):
-    if len(message.command) < 2:
+    if len(message.command) < 2 and not message.reply_to_message:
         return await message.reply_text("Please provide a query.")
-    query = " ".join(message.command[1:])
+    query = " ".join(message.command[1:]) or '?'
     mquery = False
     if message.reply_to_message:
         rname = message.reply_to_message.from_user.first_name
