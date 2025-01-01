@@ -9,7 +9,10 @@ from pyrogram.enums import ChatMemberStatus
 
 @Sophia.on_message(filters.command(["promote", "fpromote", "lpromote", "lowpromote", "fullpromote"], prefixes=HANDLER) & filters.user("me"))
 async def promote(_, message):
-    if message.reply_to_message: user_id = message.reply_to_message.from_user.id
+    title = None
+    if message.reply_to_message:
+        user_id = message.reply_to_message.from_user.id
+        title = " ".join(message.command[1:]) or None
     else:
         if len(message.command) < 2:
             return await message.reply("Reply to a user or enter the user ID to promote.")
@@ -71,6 +74,7 @@ async def promote(_, message):
         type = ''
     try:
         await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
+        if title: await Sophia.set_administrator_title(message.chat.id, user_id, title)
         await message.reply(f"Successfuly {type}promoted!")
     except Exception as e:
         logging.error(e)
