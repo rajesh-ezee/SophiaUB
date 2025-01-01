@@ -52,6 +52,7 @@ API_HASH = os.environ.get("API_HASH") or VAR_API_HASH
 HANDLER = [".","~","!","$","#"]
 LOG_CHANNEL = -1002010994783
 TOKEN = os.environ.get("TOKEN") or VAR_TOKEN
+SUDO_USERS = os.environ.get("SUDO_USERS") or VAR_SUDO_USERS or []
 REPO_URL = os.environ.get("YOUR_REPO_LINK") or VAR_REPO_URL
 MY_VERSION = 1.2
 bot_start_time = datetime.now()
@@ -66,6 +67,9 @@ what_is_new = f"""Update {MY_VERSION} changelog:\n
 6. Added settings
 7. Bug fixes, Etc
 """
+if not isinstance(SUDO_USERS, list):
+    raise TypeError("SUDO_USERS id must be a list not str or int!")
+    exit()
 if not SESSION or not API_ID or not API_HASH or not MONGO_DB_URI or not REPO_URL or not TOKEN:
     raise "Values not found"
     logging.error("You should enter the required details on variables.py or you need set env")
