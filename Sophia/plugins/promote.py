@@ -5,6 +5,7 @@ from Sophia import HANDLER
 import asyncio
 import logging
 from config import OWNER_ID
+from pyrogram.enums import ChatMemberStatus
 
 @Sophia.on_message(filters.command(["promote", "fpromote", "lpromote", "lowpromote", "fullpromote"], prefixes=HANDLER) & filters.user("me"))
 async def promote(_, message):
