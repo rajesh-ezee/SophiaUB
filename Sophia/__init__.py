@@ -66,9 +66,6 @@ what_is_new = f"""Update {MY_VERSION} changelog:\n
 6. Added settings
 7. Bug fixes, Etc
 """
-if not isinstance(SUDO_USERS, list):
-    raise TypeError("SUDO_USERS id must be a list not str or int!")
-    exit()
 if not SESSION or not API_ID or not API_HASH or not MONGO_DB_URI or not REPO_URL or not TOKEN:
     raise "Values not found"
     logging.error("You should enter the required details on variables.py or you need set env")
