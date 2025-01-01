@@ -15,7 +15,7 @@ from subprocess import getoutput as run
 from pytgcalls import *
 from pytgcalls.types import *
 import logging
-
+from variables import DEVELOPER_MODE
 
 app = Sophia
 Client = Sophia
@@ -29,6 +29,8 @@ def p(text):
 
 @Sophia.on_message(filters.command(["eval", "e", "python"], prefixes=HANDLER) & filters.user("me"))
 async def eval(client, message):
+    if not DEVELOPER_MODE:
+        return await message.reply("Developer mode isn't enabled turn and try!")
     m = message
     chat_id = m.chat.id
     m_reply = m.reply_to_message
