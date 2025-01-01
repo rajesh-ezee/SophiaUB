@@ -3,9 +3,12 @@ from Sophia.__main__ import Sophia
 from pyrogram import filters
 import asyncio
 import io
+from variables import DEVELOPER_MODE
 
 @Sophia.on_message(filters.command(["sh", "shell", "bash"], prefixes=HANDLER) & filters.user('me'))
 async def shell(_, message):
+    if not DEVELOPER_MODE:
+        return await message.reply("Developer mode isn't enabled turn and try!")
     if len(message.command) < 2:
         return await message.edit("Please enter a command to run! 🥀 ✨")
     
