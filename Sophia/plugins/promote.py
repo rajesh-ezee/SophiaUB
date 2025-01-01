@@ -1,37 +1,31 @@
-try:
-    from pyrogram.types import ChatPrivileges
-    from pyrogram import *
-    from Sophia import Sophia
-    from Sophia import HANDLER
-    import asyncio
-    import logging 
+from pyrogram.types import ChatPrivileges
+from pyrogram import *
+from Sophia import Sophia
+from Sophia import HANDLER
+import asyncio
+import logging
+from config import OWNER_ID
 
-    @Sophia.on_message(filters.command("fpromote", prefixes=HANDLER) & filters.user("me"))
-    async def full_promote(_, message):
-        me = await Sophia.get_me()
-        me_id = me.id
-    
-        if message.reply_to_message:
-            user_id = message.reply_to_message.from_user.id
-        else:
-            if len(message.command) < 2:
-                return await message.reply("Reply to a user or enter the user ID to promote.")
-            user_id = str(message.text.split(None, 1)[1])
-        user_id = str(user_id)
-        if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-            return await message.reply("Please enter a valid id.")
-        if user_id == str(me_id):
-            return await message.reply("You can't promote yourself!")
+@Sophia.on_message(filters.command(["promote", "fpromote", "lpromote", "lowpromote", "fullpromote"], prefixes=HANDLER) & filters.user("me"))
+async def promote(_, message):
+    if message.reply_to_message: user_id = message.reply_to_message.from_user.id
+    else:
+        if len(message.command) < 2:
+            return await message.reply("Reply to a user or enter the user ID to promote.")
+        txt = " ".join(message.command[1:])
         try:
-            user = await Sophia.get_chat_member(message.chat.id, user_id)
-            if user.promoted_by:
-                return await message.reply("This user is already admin")
-        except Exception as e:
-            if str(e) == """Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")""":
-                return await message.reply('This user is not in this group!')
-            elif str(e) == """Telegram says: [400 USERNAME_NOT_OCCUPIED] - The username is not occupied by anyone (caused by "contacts.ResolveUsername")""":
-                return await message.reply("Invalid user!")
-        
+            user_id = await Sophia.get_chat_member(message.chat.id, txt)
+            user_id = user_id.user.id
+        except: return await message.reply("Reply to a user or enter the user ID to promote.")      
+    if user_id == message.from_user.id:
+        return await message.reply("You can't promote yourself!")
+    target = await Sophia.get_chat_member(message.chat.id, user_id)
+    you = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
+    if target.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
+        return await message.reply("**ℹ️ The user is admin/owner already!**")
+    if not you.stats in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER] or not you.privileges.can_promote_members:
+        return await message.reply("**ℹ️ You don't have enough admin rights to do this!**")
+    if message.text[1:].startswith('f'):
         privileges = ChatPrivileges(
             can_change_info=True,
             can_invite_users=True,
@@ -46,207 +40,83 @@ try:
             can_post_stories=True,
             is_anonymous=False
         )
-    
-        try:
-            await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-            await message.reply("Successfuly promoted!")
-        except Exception as e:
-            e = str(e)
-            if e.startswith("Telegram says: [400 PEER_ID_INVALID]"):
-                try:
-                    m = await Sophia.send_message(id, ".")
-                    await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-                    m = m.delete()
-                    await message.reply("Successfuly promoted!")
-                except Exception as o:
-                    k = f"Already peer id invalid so tried send message to user now error: {o}"
-                    raise k
-                    return await message.reply(f"Error on promoting user: {o}")
-            elif e.startswith("Telegram says: [403 CHAT_ADMIN_REQUIRED]") or e.startswith("Telegram says: [403 RIGHT_FORBIDDEN]"):
-                return await message.reply("You need enough admin rights to do this!")
-            await message.reply(f"Failed to promote: {e}")
-            e = f"I can't promote {user_id}: {e}"
-            raise e
-
-    @Sophia.on_message(filters.command("promote", prefixes=HANDLER) & filters.user("me"))
-    async def normal_promote(_, message):
-        me = await Sophia.get_me()
-        me_id = me.id
-    
-        if message.reply_to_message:
-            user_id = message.reply_to_message.from_user.id
-        else:
-            if len(message.command) < 2:
-                return await message.reply("Reply to a user or enter the user ID to promote.")
-            user_id = str(message.text.split(None, 1)[1])
-        user_id = str(user_id)
-        if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-            return await message.reply("Please enter a valid id.")
-        if user_id == str(me_id):
-            return await message.reply("You can't promote yourself!")
-        try:
-            user = await Sophia.get_chat_member(message.chat.id, user_id)
-            if user.promoted_by:
-                return await message.reply("This user is already admin")
-        except Exception as e:
-            if str(e) == """Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")""":
-                return await message.reply('This user is not in this group!')
-            elif str(e) == """Telegram says: [400 USERNAME_NOT_OCCUPIED] - The username is not occupied by anyone (caused by "contacts.ResolveUsername")""":
-                return await message.reply("Invalid user!")
-
-        
+        type = 'Full'
+    elif message.text[1:].startswith('l'):
         privileges = ChatPrivileges(
             can_change_info=False,
+            can_invite_users=True,
+            can_pin_messages=False,
+            can_manage_chat=False,
+            can_manage_video_chats=True,
+            can_post_stories=False,
+            can_manage_topics=False,
+            can_delete_messages=False,
+            is_anonymous=False
+        )
+        type = 'Low'
+    else:
+        privileges = ChatPrivileges(
+            can_change_info=True,
             can_invite_users=True,
             can_pin_messages=True,
             can_manage_chat=True,
             can_manage_video_chats=True,
-            can_manage_topics=False,
-            can_delete_messages=False,
-            can_post_stories=True,
+            can_delete_messages=True,
             can_delete_stories=True,
             can_edit_stories=True,
+            can_post_stories=True,
             is_anonymous=False
         )
-        try:
-            await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-            await message.reply("Successfuly promoted!")
-        except Exception as e:
-            e = str(e)
-            if e.startswith("Telegram says: [400 PEER_ID_INVALID]"):
-                try:
-                    m = await Sophia.send_message(id, ".")
-                    await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-                    m = m.delete()
-                    await message.reply("Successfuly promoted!")
-                except Exception as o:
-                    k = f"Already peer id invalid so tried send message to user now error: {o}"
-                    raise k
-                    return await message.reply(f"Error on promoting user: {o}")
-            elif e.startswith("Telegram says: [403 CHAT_ADMIN_REQUIRED]") or e.startswith("Telegram says: [403 RIGHT_FORBIDDEN]"):
-                return await message.reply("You need enough admin rights to do this!")
-            await message.reply(f"Failed to promote: {e}")
-            e = f"I can't promote {user_id}: {e}"
-            raise e
+        type = ''
+    try:
+        await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
+        await message.reply(f"Successfuly {type}promoted!")
+    except Exception as e:
+        logging.error(e)
+        await message.reply(f"**Error:** {e}")
 
-    @Sophia.on_message(filters.command("lpromote", prefixes=HANDLER) & filters.user("me"))
-    async def low_promote(_, message):
-        me = await Sophia.get_me()
-        me_id = me.id
-    
-        if message.reply_to_message:
-            user_id = message.reply_to_message.from_user.id
-        else:
-            if len(message.command) < 2:
-                return await message.reply("Reply to a user or enter the user ID to promote.")
-            user_id = str(message.text.split(None, 1)[1])
-        user_id = str(user_id)
-        if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-            return await message.reply("Please enter a valid id.")
-        if user_id == str(me_id):
-            return await message.reply("You can't promote yourself!")
+@Sophia.on_message(filters.command("demote", prefixes=HANDLER) & filters.user("me"))
+async def demote(_, message):
+    if message.reply_to_message: user_id = str(message.reply_to_message.from_user.id)
+    else:
+        if len(message.command) < 2:
+            return await message.reply("Reply to a user or enter the user ID to demote.")
+        txt = " ".join(message.command[1:])
         try:
-            user = await Sophia.get_chat_member(message.chat.id, user_id)
-            if user.promoted_by:
-                return await message.reply("This user is already admin")
-        except Exception as e:
-            if str(e) == """Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")""":
-                return await message.reply('This user is not in this group!')
-            elif str(e) == """Telegram says: [400 USERNAME_NOT_OCCUPIED] - The username is not occupied by anyone (caused by "contacts.ResolveUsername")""":
-                return await message.reply("Invalid user!")
+            user_id = await Sophia.get_chat_member(message.chat.id, txt)
+            user_id = user_id.user.id
+        except: return await message.reply("Reply to a user or enter the user ID to demote.")
+    if user_id == message.from_user.id:
+        return await message.reply("You can't promote yourself!")
+    target = await Sophia.get_chat_member(message.chat.id, user_id)
+    you = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
+    if not target.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
+        return await message.reply("**ℹ️ The user not a admin to demote!**")
+    if not you.stats in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER] or not you.privileges.can_promote_members:
+        return await message.reply("**ℹ️ You don't have enough admin rights to do this!**")
+    privileges = ChatPrivileges(
+        can_change_info=False,
+        can_invite_users=False,
+        can_pin_messages=False,
+        can_manage_chat=False,
+        can_manage_video_chats=False,
+        can_manage_topics=False,
+        can_delete_messages=False,
+        can_delete_stories=False,
+        can_edit_stories=False,
+        can_post_stories=False,
+        is_anonymous=False
+    )
+    try:
+        await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
+        await message.reply("Successfuly demoted!")
+    except Exception as e:
+        logging.error(e)
+        await message.reply(f"**Error:** {e}")
 
-
-        
-        privileges = ChatPrivileges(
-            can_change_info=False,
-            can_invite_users=True,
-            can_pin_messages=False,
-            can_manage_chat=False,
-            can_manage_video_chats=True,
-            can_post_stories=False,
-            can_manage_topics=False,
-            can_delete_messages=False,
-            is_anonymous=False
-        )
-        try:
-            await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-            await message.reply("Successfuly promoted!")
-        except Exception as e:
-            e = str(e)
-            if e.startswith("Telegram says: [400 PEER_ID_INVALID]"):
-                try:
-                    m = await Sophia.send_message(id, ".")
-                    await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-                    m = m.delete()
-                    await message.reply("Successfuly promoted!")
-                except Exception as o:
-                    k = f"Already peer id invalid so tried send message to user now error: {o}"
-                    raise k
-                    return await message.reply(f"Error on promoting user: {o}")
-            elif e.startswith("Telegram says: [403 CHAT_ADMIN_REQUIRED]") or e.startswith("Telegram says: [403 RIGHT_FORBIDDEN]"):
-                return await message.reply("You need admin access to do this!")
-            await message.reply(f"Failed to promote: {e}")
-            e = f"I can't promote {user_id}: {e}"
-            raise e
-
-    @Sophia.on_message(filters.command("demote", prefixes=HANDLER) & filters.user("me"))
-    async def demote(_, message):
-        me = await Sophia.get_me()
-        me_id = me.id
-    
-        if message.reply_to_message:
-            user_id = str(message.reply_to_message.from_user.id)
-        else:
-            if len(message.command) < 2:
-                return await message.reply("Reply to a user or enter the user ID to demote.")
-            user_id = str(message.text.split(None, 1)[1])
-        if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-            return await message.reply("Please enter a valid id.")
-        if user_id == str(me_id):
-            return await message.reply("You can't demote yourself!")
-        try:
-            user = await Sophia.get_chat_member(message.chat.id, user_id)
-            if user.promoted_by == None:
-                return await message.reply("This user is not admin")
-        except Exception as e:
-            if str(e) == """Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")""":
-                return await message.reply('This user is not in this group!')
-            elif str(e) == """Telegram says: [400 USERNAME_NOT_OCCUPIED] - The username is not occupied by anyone (caused by "contacts.ResolveUsername")""":
-                return await message.reply("Invalid user!")
-        
-        privileges = ChatPrivileges(
-            can_change_info=False,
-            can_invite_users=False,
-            can_pin_messages=False,
-            can_manage_chat=False,
-            can_manage_video_chats=False,
-            can_manage_topics=False,
-            can_delete_messages=False,
-            can_delete_stories=False,
-            can_edit_stories=False,
-            can_post_stories=False,
-            is_anonymous=False
-        )
-        try:
-            await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-            await message.reply("Successfuly demoted!")
-        except Exception as e:
-            e = str(e)
-            if e.startswith("Telegram says: [400 PEER_ID_INVALID]"):
-                try:
-                    m = await Sophia.send_message(id, ".")
-                    await Sophia.promote_chat_member(message.chat.id, user_id, privileges)
-                    m = m.delete()
-                    await message.reply("Successfuly demoted!")
-                except Exception as o:
-                    k = f"Already peer id invalid so tried send message to user now error: {o}"
-                    raise k
-                    return await message.reply(f"Error on demoting user: {o}")
-            elif e.startswith("Telegram says: [403 CHAT_ADMIN_REQUIRED]") or e.startswith("Telegram says: [403 RIGHT_FORBIDDEN]"):
-                return await message.reply("You need admin access to do this!")
-            await message.reply(f"Failed to demote: {e}")
-            e = f"I can't demote {user_id}: {e}"
-            raise e
-except Exception as e:
-    e = f"[ERROR]\nError on promote.py: {e}"
-    logging.error(e)
+MOD_NAME = "Promote"
+MOD_HELP = """.promote (reply or username) - To promote them with basic rights.
+.lpromote (reply or username) - To promote them with low rights.
+.fpromote (reply or username) - To promote them with all rights.
+.demote (reply or username) - To demote them.
+"""
