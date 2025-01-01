@@ -91,3 +91,13 @@ def qfilter(inlineQuery):
         try: return str(query.query).startswith(inlineQuery)
         except: return str(query.data).startswith(inlineQuery)
     return filters.create(funcMano)
+
+async def ask(message, text=None):
+    chat, usr = message.chat.id, message.from_user.id
+    if text: await Sophia.send_message(chat, text)
+    while True:
+        async for message in Sophia.get_chat_history(chat, limit=1):
+            if message.from_user.id == usr:
+                break
+                return message.text
+        await asyncio.sleep(0.4)
