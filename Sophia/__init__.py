@@ -25,9 +25,11 @@ MONGO_DB_URI = os.environ.get("MONGO_DB_URI") or VAR_MONGO_DB_URI
 if not MONGO_DB_URI:
     logging.error("Where is mongodb uri")
     exit()
-MONGO_DB = MongoClient(MONGO_DB_URI) # Special Thanks To KoraXD For Giving This Codes!!
+MONGO_DB = MongoClient(MONGO_DB_URI) 
 DATABASE = AsyncIOMotorClient(MONGO_DB_URI)["LinkUp"]
-DB = DATABASE['SophiaInfo']
+try: from variables import DB_ID
+except: DB_ID = ''
+DB = DATABASE[f'SophiaInfo{DB_ID}']
 GAME_DATABASE = AsyncIOMotorClient(MONGO_DB_URI)["LinkUp"]
 
 # Db session ( ignore )
