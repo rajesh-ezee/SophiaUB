@@ -1,8 +1,6 @@
 git+https://github.com/KurimuzonAkuma/pyrogram.git
 TgCrypto
 py-tgcalls
-websocket-client
-websockets
 matplotlib
 beautifulsoup4
 aiofiles
@@ -25,5 +23,4 @@ youtube_search
 python-ffmpeg
 ffmpeg
 motor==3.6.0
-telegraph
 gtts
