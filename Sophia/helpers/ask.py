@@ -17,6 +17,7 @@ async def ask_helper(_, client, message):
 
 async def ask(message, text=None):
     global datas
+    if message.text.startswith(('.','!','/')): return False
     if text: await otazuki.send_message(message.chat.id, text)
     datas[message.from_user.id] = {}
     datas[message.from_user.id]['chat'] = message.chat.id
@@ -30,6 +31,6 @@ async def ask(message, text=None):
     del datas[message.from_user.id]
     return res
 
-@otazuki.on_message(filters.text & ~filters.command(["*"]) & filters.create(ask_helper))
+@otazuki.on_message(filters.text & filters.create(ask_helper))
 async def ask_helperr(_, m):
     pass
