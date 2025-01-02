@@ -2,6 +2,7 @@ from config import *
 from Sophia import *
 from pyrogram import *
 from pyrogram.types import *
+import traceback 
 
 @SophiaBot.on_inline_query(filters.regex('SophiaReportBug'))
 async def send_reportBug(_, query):
