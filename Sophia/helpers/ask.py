@@ -30,6 +30,6 @@ async def ask(message, text=None):
     del datas[message.from_user.id]
     return res
 
-@otazuki.on_message(filters.text & ~filters.command() & filters.create(ask_helper))
+@otazuki.on_message(filters.text & ~filters.command(["*"]) & filters.create(ask_helper))
 async def ask_helperr(_, m):
     pass
