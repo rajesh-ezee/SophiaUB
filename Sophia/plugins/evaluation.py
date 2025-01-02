@@ -16,6 +16,7 @@ from pytgcalls import *
 from pytgcalls.types import *
 import logging
 from variables import DEVELOPER_MODE
+from Sophia.helpers.ask import *
 
 app = Sophia
 Client = Sophia
