@@ -1,13 +1,13 @@
-import requests
+import requests_async as requests
 from pyrogram import filters, Client
 from pyrogram.types import Message
 from Sophia.__main__ import Sophia as app
 from config import OWNER_ID
 from Sophia import HANDLER, MY_VERSION
+from datetime import datetime
 import json
-from datetime import datetime 
 
-def fetch_data(query: str, message: str) -> tuple:
+async def fetch_data(query: str, message: Message) -> str:
     try:
         headers = {
             "Accept": "application/json, text/plain, */*",
@@ -15,7 +15,7 @@ def fetch_data(query: str, message: str) -> tuple:
             "Accept-Language": "en-US,en;q=0.9",
             "Content-Type": "application/json"
         }
-        url =  "https://api.binjie.fun/api/generateStream"
+        url = "https://api.binjie.fun/api/generateStream"
         data = {
             "prompt": query,
             "userId": f"#/chat/{message.from_user.id}",
@@ -26,9 +26,8 @@ def fetch_data(query: str, message: str) -> tuple:
                 "withoutContext": False
             }
         }
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        data = response.text
-        return data
+        response = await requests.post(url, headers=headers, json=data)
+        return response.text
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
@@ -55,9 +54,9 @@ async def chatgpt(_: Client, message: Message):
         query += f"\n\n\nThis message from code not from user: EXTRA INFO ABOUT USER: \n his name {urname} \n his telegram user id: {urid} \n  if sender telegram userid is 5965055071 he is your owner you should respect him his name Otazuki\n\n This user using userbot to use you in telegram\n\n\n YOU SHOULD NOT USE FONTS IT DOESN'T WORK ON TELEGRAM.\n\n The userbot you are bot you are in name is Sophia if they asked you should tell if they asked how to use this userbot you should give this link http://graph.org/Sophia-Commands-01-30 this have all Sophia bot commands and Sophia was created by t.me/Hyper_speed0 and t.me/Otazuki\n Your version is {MY_VERSION} YOU ARE NOT BOT YOU ARE USERBOT, Time: ( {datetime.now()} ) if user asked time convert this into ist Time UTC +5:30 and tell them what time is now and don't say 'converted to IST ' like that just convert and just say what the asked like if i asked time say 1am 2pm 1:12am jan 12 2024 if asked, Repo of sophia: https://Github.com/Otazuki004/SophiaUB"
     txt = await message.reply_text("`Processing...`")
     if mquery:
-        api_response = fetch_data(mquery, message)
+        api_response = await fetch_data(mquery, message)
     else:
-        api_response = fetch_data(query, message)
+        api_response = await fetch_data(query, message)
     await txt.edit(api_response)
 
 MOD_NAME = 'Gpt'
