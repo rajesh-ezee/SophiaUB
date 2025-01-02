@@ -9,6 +9,7 @@ datas = {}
 
 async def ask_helper(_, client, message):
     global datas
+    if message.text.startswith(('.','!','/')): return False
     if datas.get(message.from_user.id) and datas.get(message.from_user.id).get('chat') == message.chat.id and datas.get(message.from_user.id).get('Listen'):
         datas[message.from_user.id]['message'] = message.text
         datas[message.from_user.id]['Listen'] = False
@@ -17,7 +18,6 @@ async def ask_helper(_, client, message):
 
 async def ask(message, text=None):
     global datas
-    if message.text.startswith(('.','!','/')): return False
     if text: await otazuki.send_message(message.chat.id, text)
     datas[message.from_user.id] = {}
     datas[message.from_user.id]['chat'] = message.chat.id
