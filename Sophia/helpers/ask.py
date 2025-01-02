@@ -9,12 +9,14 @@ datas = {}
 
 async def ask_helper(_, client, message):
     global datas
-    if message.text.startswith(('.','!','/')): return False
-    if datas.get(message.from_user.id) and datas.get(message.from_user.id).get('chat') == message.chat.id and datas.get(message.from_user.id).get('Listen'):
-        datas[message.from_user.id]['message'] = message.text
-        datas[message.from_user.id]['Listen'] = False
+    try:
+        if message.text.startswith(('.','!','/')): return False
+        if datas.get(message.from_user.id) and datas.get(message.from_user.id).get('chat') == message.chat.id and datas.get(message.from_user.id).get('Listen'):
+            datas[message.from_user.id]['message'] = message.text
+            datas[message.from_user.id]['Listen'] = False
+            return False
         return False
-    return False
+    except: pass
 
 async def ask(message, text=None):
     global datas
