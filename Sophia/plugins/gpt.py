@@ -1,4 +1,4 @@
-import requests_async as requests
+import aiohttp
 from pyrogram import filters, Client
 from pyrogram.types import Message
 from Sophia.__main__ import Sophia as app
@@ -26,8 +26,9 @@ async def fetch_data(query: str, message: Message) -> str:
                 "withoutContext": False
             }
         }
-        response = await requests.post(url, headers=headers, json=data)
-        return response.text
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers, json=data) as response:
+                return await response.text()
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
