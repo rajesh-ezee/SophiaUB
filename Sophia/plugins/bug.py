@@ -7,7 +7,7 @@ import traceback
 @SophiaBot.on_inline_query(filters.regex('SophiaReportBug'))
 async def send_reportBug(_, query):
   try:
-    btn = InlineKeyboardMarkup([[InlineKeyboardButton("🪲 Report a bug", url="t.me/otazuki")]])
+    btn = InlineKeyboardMarkup([[InlineKeyboardButton("🪲 Report a bug", url="t.me/futurecity005")]])
     result = InlineQueryResultArticle(
       title="Report bug",
       input_message_content=InputTextMessageContent(
