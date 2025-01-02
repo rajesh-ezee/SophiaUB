@@ -27,8 +27,6 @@ if not MONGO_DB_URI:
     exit()
 MONGO_DB = MongoClient(MONGO_DB_URI) 
 DATABASE = AsyncIOMotorClient(MONGO_DB_URI)["LinkUp"]
-try: from variables import DB_ID
-except: DB_ID = ''
 DB = DATABASE[f'SophiaInfo{DB_ID}']
 GAME_DATABASE = AsyncIOMotorClient(MONGO_DB_URI)["LinkUp"]
 
