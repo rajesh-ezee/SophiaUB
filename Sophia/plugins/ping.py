@@ -1,6 +1,3 @@
-# This Codes We take from https://github.com/otazuki004/QuantumRobot.git
-# Please use QuantumRobot
-
 from Sophia import *
 from Sophia.__main__ import Sophia as bot
 from config import OWNER_ID
@@ -28,14 +25,10 @@ def ping_website(url):
     except requests.ConnectionError:
         return f"» Failed to connect to {url}"
 
-# Example: Ping Telegram's website
 telegram_url = "https://google.com"
 
-@bot.on_message(filters.command("ping", prefixes=HANDLER))
+@bot.on_message(filters.command("ping", prefixes=HANDLER) & filters.user('me'))
 async def ping_pong(client, message):
-    if not message.from_user.id == OWNER_ID or message.from_user.id in SUDO_USERS_ID:
-        return
-    # Calculate the bot's response time
     start_time = bot_start_time
     end_time = datetime.now()
     ping_time = (end_time - start_time).total_seconds() * 1000
