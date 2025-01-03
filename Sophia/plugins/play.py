@@ -14,7 +14,6 @@ from pytgcalls.types import MediaStream
 from Sophia.Database.play import *
 from pyrogram.types import *
 
-vcInfo = {}
 PLAYPREFIXES = HANDLER
 PLAYPREFIXES += ["/"]
 oh = play()
@@ -48,15 +47,12 @@ async def getPlayGroups(_, message):
         try:
             d = await Sophia.get_chat(x)
             txt += f"{d.title}{'' if not d.username else f' | @{d.username}'}\n"
-        except Exception as e:
-            logging.error(e)
-            pass
+        except Exception as e: logging.error(e)
     await a.delete()
     if info and txt: return await message.reply(f"**⚕️ Here are the chats you allowed permission for play:**\n\n{txt}")
     await message.reply('No chats have play commands permission ❌')
 
 is_playing = {}
-num_queues = {}
 queue_id = {}
 
 async def make_queue(chat_id):
@@ -71,7 +67,6 @@ async def make_queue(chat_id):
         return 1
 
 async def play_filter(_, client, message):
-    global num_queues
     if len(message.text.split()) < 2:
         if not message.reply_to_message: return True
         if message.reply_to_message.audio or message.reply_to_message.video: pass
@@ -85,17 +80,14 @@ async def play_filter(_, client, message):
             await asyncio.sleep(0.3)
         try: await msg.delete()
         except: pass
-        if num_queues.get(message.chat.id): num_queues[message.chat.id] += 1
-        else: num_queues[message.chat.id] = 1
         return True
     else:
         id = await make_queue(message.chat.id)
-        if id == 1:
-            return True
+        if id == 1: return True
             
 @bot.on_message(filters.command(["play", "sp"], prefixes=PLAYPREFIXES) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
 async def play(_, message):
-    global vcInfo, is_playing, num_queues
+    global is_playing, queue_id
     try: await SophiaVC.start()
     except: pass
     if len(message.text.split()) < 2:
@@ -118,23 +110,26 @@ async def play(_, message):
                         f"**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
                     )
                 )
-                vcInfo[message.chat.id] = {"title": f'{title} {message.id}', "duration": dur}
-                # Queue -------------
                 is_playing[message.chat.id] = True
-                # -------------------
                 await SophiaVC.play(message.chat.id, MediaStream(path))
                 await asyncio.sleep(dur + 5)
-                await manage_playback(message.chat.id, f'{title} {message.id}', dur)
                 os.remove(path)
+                await manage_playback(message.chat.id, f'{title} {message.id}', dur)
             except Exception as e:
-                if str(e) == """Telegram says: [403 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "phone.CreateGroupCall")""":
-                    return await message.reply('**Cannot play song admin rights required ❌**')
-                await message.reply(f"Error: {e}")
+                if "CHAT_ADMIN_REQUIRED" in str(e):
+                    await message.reply('**Cannot play song admin rights required ❌**')
+                else:
+                    await message.reply(f"Error: {e}")
+                chat_id = message.chat.id
+                queue_id[chat_id].remove(queue_id.get(chat_id)[0])
+                is_playing[chat_id] = False
+                if not queue_id.get(chat_id):
+                    await SophiaVC.leave_call(chat_id)
             return
         else: return await message.reply("Provide a song name or link.")
     query = " ".join(message.command[1:])
     m = await message.reply("🔄 Searching....")
-    if query.startswith(("www.youtube", "http://", "https://")):
+    if query.startswith(("www.youtu", "http://youtu", "https://youtu")):
         link = query
         with YoutubeDL({'quiet': True}) as ydl:
             info = ydl.extract_info(link, download=False)
@@ -176,25 +171,28 @@ async def play(_, message):
                 f"**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
             )
         )
-        vcInfo[message.chat.id] = {"title": f'{title} {message.id}', "duration": dur}
-        # Queue -------------
         is_playing[message.chat.id] = True
-        # -------------------  
         await SophiaVC.play(message.chat.id, MediaStream(audio_file))
         await asyncio.sleep(dur + 5)
         await manage_playback(message.chat.id, f'{title} {message.id}', dur)
     except Exception as e:
-        if str(e) == """Telegram says: [403 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "phone.CreateGroupCall")""":
-            return await message.reply('**Cannot play song admin rights required ❌**')
-        await message.reply(f"Error: {e}")
+        if "CHAT_ADMIN_REQUIRED" in str(e):
+            await message.reply('**Cannot play song admin rights required ❌**')
+        else:
+            await message.reply(f"Error: {e}")
+        chat_id = message.chat.id
+        queue_id[chat_id].remove(queue_id.get(chat_id)[0])
+        is_playing[chat_id] = False
+        if not queue_id.get(chat_id):
+            await SophiaVC.leave_call(chat_id)
     try:
         os.remove(audio_file)
         os.remove(thumb_name)
-    except: pass
+    except Exception as e: logging.error(e)
 
 @bot.on_message(filters.command("vplay", prefixes=PLAYPREFIXES) & filters.create(publicFilter) & filters.create(play_filter) & filters.user(OWN) & ~filters.private & ~filters.bot)
 async def vplay(_, message):
-    global vcInfo, is_playing, num_queues
+    global is_playing, queue_id
     try: await SophiaVC.start()
     except: pass
     if len(message.text.split()) < 2:
@@ -211,18 +209,21 @@ async def vplay(_, message):
                     photo="https://i.imgur.com/9KKPfOA.jpeg",
                     caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {dur // 60}:{dur % 60:02d} Mins\n**🦋 Stream Type:** Telegram video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
                 )
-                vcInfo[message.chat.id] = {"title": f'{title} {message.id}', "duration": dur}
-                # Queue -------------
                 is_playing[message.chat.id] = True
-                # -------------------
                 await SophiaVC.play(message.chat.id, MediaStream(path))
                 await asyncio.sleep(dur + 5)
-                await manage_playback(message.chat.id, f'{title} {message.id}', dur)
                 os.remove(path)
+                await manage_playback(message.chat.id, f'{title} {message.id}', dur)
             except Exception as e:
-                if str(e) == """Telegram says: [403 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "phone.CreateGroupCall")""":
-                    return await message.reply('**Cannot play song admin rights required ❌**')
-                await message.reply(f"Error: {e}")
+                if "CHAT_ADMIN_REQUIRED" in str(e):
+                    await message.reply('**Cannot play song admin rights required ❌**')
+                else:
+                    await message.reply(f"Error: {e}")
+                chat_id = message.chat.id
+                queue_id[chat_id].remove(queue_id.get(chat_id)[0])
+                is_playing[chat_id] = False
+                if not queue_id.get(chat_id):
+                    await SophiaVC.leave_call(chat_id)
             return
         else: return await message.reply("Provide a video name or link.")
     query = " ".join(message.command[1:])
@@ -263,52 +264,50 @@ async def vplay(_, message):
             photo=thumb_name,
             caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {duration // 60}:{duration % 60:02d} Mins\n**🦋 Stream Type:** Video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
         )
-        vcInfo[message.chat.id] = {"title": f'{title} {message.id}', "duration": duration}
-        # Queue -------------
         is_playing[message.chat.id] = True
-        # -------------------
         await SophiaVC.play(message.chat.id, MediaStream(video_file))
         await asyncio.sleep(duration + 5)
         await manage_playback(message.chat.id, f'{title} {message.id}', duration)
     except Exception as e:
-        if str(e) == """Telegram says: [403 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "phone.CreateGroupCall")""":
-            return await message.reply('**Cannot play video admin rights required ❌**')
-        await message.reply(f"Error: {e}")
+        if "CHAT_ADMIN_REQUIRED" in str(e):
+            await message.reply('**Cannot play video admin rights required ❌**')
+        else:
+            await message.reply(f"Error: {e}")
+        chat_id = message.chat.id
+        queue_id[chat_id].remove(queue_id.get(chat_id)[0])
+        is_playing[chat_id] = False
+        if not queue_id.get(chat_id):
+            await SophiaVC.leave_call(chat_id)
     try:
         os.remove(video_file)
         os.remove(thumb_name)
-    except: pass
+    except Exception as e: logging.error(e)
         
 async def manage_playback(chat_id, title, duration):
-    global vcInfo, is_playing, num_queues, queue_id
-    if vcInfo.get(chat_id, {}).get("title") == title:
-        try:
-            queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-            is_playing[chat_id] = False
-            num_queues[chat_id] -= 1
-            if not queue_id.get(chat_id):
-                await SophiaVC.leave_call(chat_id)
-                vcInfo.pop(chat_id, None)
-        except Exception as e: logging.error(e)
+    global is_playing, queue_id
+    try:
+        queue_id[chat_id].remove(queue_id.get(chat_id)[0])
+        is_playing[chat_id] = False
+        if not queue_id.get(chat_id):
+            await SophiaVC.leave_call(chat_id)
+    except Exception as e: logging.error(e)
 
 @bot.on_message(filters.command("skip", prefixes=PLAYPREFIXES) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
 async def skip(_, message):
-    global queue_id, vcInfo, num_queues, is_playing
+    global queue_id, is_playing
     a = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
     if a.status == ChatMemberStatus.MEMBER or not a.privileges.can_manage_video_chats:
         return await message.reply("**You don't have enough admin rights to use this command ❌**")
     chat_id = message.chat.id
-    if vcInfo.get(message.chat.id):
+    if queue_id.get(message.chat.id):
         try:
             if len(queue_id.get(message.chat.id)) > 1:
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
             else:
                 await message.reply("**ℹ️ No more queues in the chat leaving...**")
                 await SophiaVC.leave_call(message.chat.id)
-                vcInfo.pop(message.chat.id, None)
                 try: queue_id[chat_id].remove(queue_id.get(chat_id)[0])
                 except: pass
-                num_queues[chat_id] -= 1
                 is_playing[chat_id] = False
         except Exception as w:
             logging.error(w)
