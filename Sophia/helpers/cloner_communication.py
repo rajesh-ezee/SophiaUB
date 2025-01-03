@@ -5,7 +5,7 @@ import aiofiles
 from variables import *
 
 # This function used for stop ub using SophiaCloner signel
-async def wait_for_stop_signel():
+async def wait_for_stop_signal():
   while not DEVELOPER_MODE:
     try: 
       async with aiofiles.open('communication.txt', 'r') as f:
