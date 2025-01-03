@@ -6,14 +6,12 @@ import time
 from pyrogram import enums, errors
 
 async def ban_unban_user(message, action, user_id=None):
-    me = (await Sophia.get_me()).id
-    if user_id == me:
-        return await message.reply("You can't perform this action on yourself!")
-
+    me = message.from_user.id
+    if user_id == message.from_user.id:
+        return await message.reply("⚠️ You can't do this on yourself")
     success_chats = 0
     time_start = time.time()
-    loading_msg = await message.reply(f"{'Starting gban' if action == 'ban' else 'Starting ungban'}! ⚡")
-
+    loading_msg = await message.reply(f"Processing...")
     async for dialog in Sophia.get_dialogs():
         if dialog.chat.type in [enums.ChatType.SUPERGROUP, enums.ChatType.GROUP]:
             try:
@@ -22,7 +20,7 @@ async def ban_unban_user(message, action, user_id=None):
                 else:
                     await Sophia.unban_chat_member(dialog.chat.id, user_id)
                 success_chats += 1
-                await asyncio.sleep(2)  # Avoid FloodWait
+                await asyncio.sleep(2)
             except errors.ChatAdminRequired:
                 print(f"Admin rights required in chat {dialog.chat.id}")
             except errors.FloodWait as e:
@@ -32,7 +30,13 @@ async def ban_unban_user(message, action, user_id=None):
                 print(f"Error in chat {dialog.chat.id}: {e}")
 
     await loading_msg.delete()
-    await message.reply(f"{'Gban' if action == 'ban' else 'Ungban'} completed in {success_chats} chats\nTaken time: {int(time.time() - time_start)} seconds")
+    await message.reply(f"""**✅ {'Gban' if action == 'ban' else 'Ungban'} Summary 🐬**
+
+**🚫 Successfully Baned: __{success_chats}__**
+**🕒 Taken Time: __{int(time.time() - time_start)}__**
+
+**» 🦋 Join:** __@Hyper_speed0 & @FutureCity005__ ✨🥀
+    """)
 
 
 @Sophia.on_message(filters.command("gban", prefixes=HANDLER) & filters.user("me"))
@@ -40,15 +44,12 @@ async def gban(_, message):
     if message.reply_to_message:
         user_id = message.reply_to_message.from_user.id
     elif len(message.command) >= 2:
-        try:
-            user_id = str(message.command[1])
-            if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-                return await message.reply("Please enter a valid id.")
-        except ValueError:
-            return await message.reply("Please enter a valid user ID.")
+        user_id = str(message.command[1])
+        try: user_id = await Sophia.get_users(user_id)
+        except: return await message.reply("Please enter a valid id 🆔.")
+        user_id = user_id.id
     else:
-        return await message.reply("Reply to a user or enter a valid user ID.")
-
+        return await message.reply("⚠️ Please reply to a user or enter their user-id.")
     await ban_unban_user(message, action="ban", user_id=user_id)
 
 
@@ -57,13 +58,10 @@ async def ungban(_, message):
     if message.reply_to_message:
         user_id = message.reply_to_message.from_user.id
     elif len(message.command) >= 2:
-        try:
-            user_id = str(message.command[1])
-            if not user_id.startswith(('@', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
-                return await message.reply("Please enter a valid id.")
-        except ValueError:
-            return await message.reply("Please enter a valid user ID.")
+        user_id = str(message.command[1])
+        try: user_id = await Sophia.get_users(user_id)
+        except: return await message.reply("Please enter a valid id 🆔.")
+        user_id = user_id.id
     else:
-        return await message.reply("Reply to a user or enter a valid user ID.")
-
+        return await message.reply("⚠️ Please reply to a user or enter their user-id.")
     await ban_unban_user(message, action="unban", user_id=user_id)
