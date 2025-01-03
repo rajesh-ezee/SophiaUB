@@ -12,7 +12,7 @@ async def block_user(_, message):
             await Sophia.block_user(message.chat.id)
             await message.reply("➲ I successfully blocked the user ✅.")
         except Exception as e:
-            await message.reply("ERROR", e)
+            await message.reply(f"**Error:** {e}")
     else:
         if message.chat.type == enums.ChatType.SUPERGROUP:
             if not message.reply_to_message:
@@ -22,23 +22,19 @@ async def block_user(_, message):
                 await Sophia.block_user(user_id)
                 await message.reply("➲ I successfully blocked the user ✅.")
             except Exception as e:
-                await message.reply("ERROR", e)
+                await message.reply(f"**Error:** {e}")
 
 
 @Sophia.on_message(filters.command("unblock", prefixes=HANDLER) & filters.me)
 async def unblock_user(_, message):
-    if message.chat.type == enums.ChatType.SUPERGROUP:
-        if not message.reply_to_message:
-            return await message.reply("➲ Reply a user to unblock.")
-        user_id = message.reply_to_message.from_user.id
-        try:
-            await Sophia.unblock_user(user_id)
-            await message.reply("➲ I successfully unblocked the user ✅.")
-        except Exception as e:
-            await message.reply("ERROR", e)
-    else:
-        await message.reply("➲ This command Only works on Supergroups.")
-        return
+    if not message.reply_to_message:
+        return await message.reply("➲ Reply a user to unblock.")
+    user_id = message.reply_to_message.from_user.id
+    try:
+        await Sophia.unblock_user(user_id)
+        await message.reply("➲ I successfully unblocked the user ✅.")
+    except Exception as e:
+        await message.reply(f"**Error:** {e}")
         
             
 MOD_NAME = "Blocks"
