@@ -32,8 +32,8 @@ async def ban_unban_user(message, action, user_id=None):
     await loading_msg.delete()
     await message.reply(f"""**✅ {'Gban' if action == 'ban' else 'Ungban'} Summary 🐬**
 
-**🚫 Successfully Baned: __{success_chats}__**
-**🕒 Taken Time: __{int(time.time() - time_start)}__**
+**🚫 Successfully baned:** __{success_chats}chats__
+**🕒 Taken Time:** __{int(time.time() - time_start)}s__
 
 **» 🦋 Join:** __@Hyper_speed0 & @FutureCity005__ ✨🥀
     """)
