@@ -122,7 +122,7 @@ async def play(_, message):
                     await message.reply(f"Error: {e}")
                 chat_id = message.chat.id
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-                is_playing[chat_id] = False
+                del is_playing[chat_id]
                 if not queue_id.get(chat_id):
                     await SophiaVC.leave_call(chat_id)
             return
@@ -182,7 +182,7 @@ async def play(_, message):
             await message.reply(f"Error: {e}")
         chat_id = message.chat.id
         queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-        is_playing[chat_id] = False
+        del is_playing[chat_id]
         if not queue_id.get(chat_id):
             await SophiaVC.leave_call(chat_id)
     try:
@@ -221,7 +221,7 @@ async def vplay(_, message):
                     await message.reply(f"Error: {e}")
                 chat_id = message.chat.id
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-                is_playing[chat_id] = False
+                del is_playing[chat_id]
                 if not queue_id.get(chat_id):
                     await SophiaVC.leave_call(chat_id)
             return
@@ -275,7 +275,7 @@ async def vplay(_, message):
             await message.reply(f"Error: {e}")
         chat_id = message.chat.id
         queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-        is_playing[chat_id] = False
+        del is_playing[chat_id]
         if not queue_id.get(chat_id):
             await SophiaVC.leave_call(chat_id)
     try:
@@ -287,7 +287,7 @@ async def manage_playback(chat_id, title, duration):
     global is_playing, queue_id
     try:
         queue_id[chat_id].remove(queue_id.get(chat_id)[0])
-        is_playing[chat_id] = False
+        del is_playing[chat_id]
         if not queue_id.get(chat_id):
             await SophiaVC.leave_call(chat_id)
     except Exception as e: logging.error(e)
@@ -308,7 +308,7 @@ async def skip(_, message):
                 await SophiaVC.leave_call(message.chat.id)
                 try: queue_id[chat_id].remove(queue_id.get(chat_id)[0])
                 except: pass
-                is_playing[chat_id] = False
+                del is_playing[chat_id]
         except Exception as w:
             logging.error(w)
             await message.reply('**ℹ️ No active voice chat to skip!**')
