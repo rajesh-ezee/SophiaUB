@@ -53,14 +53,14 @@ async def filter_(_, client, update):
                             await ADD_BACKUP_CHAT(message.chat.id)
                             await SET_BACKUP_CHANNEL_ID(message.chat.id, chat.id)
                             await Sophia.forward_messages(chat_id, message.chat.id, message.id)
-                            logging.error(f"Cannot forward message to set backup channel created channel now error: {e}")
+                            logging.error(f"Cannot forward message to set backup channel so created channel now maybe other error: {e}")
                         except:
                             t = traceback.format_exc()
                             logging.error(t)
             else:
                 try:
-                    c_name = f"{message.from_user.first_name} BACKUP"
-                    if message.from_user.username:
+                    c_name = f"{message.chat.first_name} BACKUP"
+                    if message.chat.username:
                         chat = await Sophia.create_channel(f"{c_name}", f"Username: @{message.chat.username}\n\n~ @Hyper_Speed0")
                         await Sophia.archive_chats(chat.id)
                     else:
@@ -68,7 +68,7 @@ async def filter_(_, client, update):
                         await Sophia.archive_chats(chat.id)
                     await ADD_BACKUP_CHAT(message.chat.id)
                     await SET_BACKUP_CHANNEL_ID(message.chat.id, chat.id)
-                    await Sophia.forward_messages(chat_id, message.chat.id, message.id)
+                    await Sophia.forward_messages(message.chat.id, message.chat.id, message.id)
                 except:
                     t = traceback.format_exc()
                     logging.error(t)
