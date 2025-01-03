@@ -1,4 +1,4 @@
-from Sophia import Sophia
+from Sophia import *
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from config import OWNER_ID
