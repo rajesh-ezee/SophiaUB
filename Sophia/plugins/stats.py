@@ -14,7 +14,7 @@ from Sophia.plugins.modules import a, help_names
 from Sophia.plugins.ping import ping_website
 from pyrogram.types import *
 from pyrogram import __version__
-from Sophia.plugins.play import vcInfo
+from Sophia.plugins.play import is_playing
 from Sophia.Database.afk import *
 from Sophia.Database.backup_msg import *
 from Sophia.Database.pmguard import *
@@ -65,7 +65,7 @@ Uᴘᴛɪᴍᴇ: {int(hours)}h {int(minutes)}m {int(seconds)}s
 Pʏᴛʜᴏɴ: {python_version}
 Pʏʀᴏɢʀᴀᴍ: {__version__}
 Pɪɴɢ: {ping_website("https://google.com")}
-Sᴏɴɢs ᴘʟᴀʏɪɴɢ: {len(vcInfo) if vcInfo else 0}
+Sᴏɴɢs ᴘʟᴀʏɪɴɢ: {len(is_playing) if is_playing else 0}
 Hᴇʟᴘ ᴍᴏᴅᴜʟᴇs: {len(help_names)}/{len(a)}
 Mʏ ᴠᴇʀsɪᴏɴ: {MY_VERSION}
 Rᴇʟᴇᴀsᴇ ᴛʏᴘᴇ: {release_type}
