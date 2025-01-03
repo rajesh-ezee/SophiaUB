@@ -119,6 +119,7 @@ async def play(_, message):
                 if "CHAT_ADMIN_REQUIRED" in str(e):
                     await message.reply('**Cannot play song admin rights required ❌**')
                 else:
+                    logging.error(e)
                     await message.reply(f"Error: {e}")
                 chat_id = message.chat.id
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
@@ -179,6 +180,7 @@ async def play(_, message):
         if "CHAT_ADMIN_REQUIRED" in str(e):
             await message.reply('**Cannot play song admin rights required ❌**')
         else:
+            logging.error(e)
             await message.reply(f"Error: {e}")
         chat_id = message.chat.id
         queue_id[chat_id].remove(queue_id.get(chat_id)[0])
@@ -218,6 +220,7 @@ async def vplay(_, message):
                 if "CHAT_ADMIN_REQUIRED" in str(e):
                     await message.reply('**Cannot play song admin rights required ❌**')
                 else:
+                    logging.error(e)
                     await message.reply(f"Error: {e}")
                 chat_id = message.chat.id
                 queue_id[chat_id].remove(queue_id.get(chat_id)[0])
@@ -272,6 +275,7 @@ async def vplay(_, message):
         if "CHAT_ADMIN_REQUIRED" in str(e):
             await message.reply('**Cannot play video admin rights required ❌**')
         else:
+            logging.error(e)
             await message.reply(f"Error: {e}")
         chat_id = message.chat.id
         queue_id[chat_id].remove(queue_id.get(chat_id)[0])
