@@ -70,7 +70,7 @@ async def filter_(_, client, update):
                         await Sophia.archive_chats(chat.id)
                     await ADD_BACKUP_CHAT(message.chat.id)
                     await SET_BACKUP_CHANNEL_ID(message.chat.id, chat.id)
-                    await Sophia.forward_messages(message.chat.id, message.chat.id, message.id)
+                    await Sophia.forward_messages(chat.id, message.chat.id, message.id)
                 except:
                     t = traceback.format_exc()
                     logging.error(t)
