@@ -5,7 +5,7 @@ import asyncio
 import time
 from pyrogram import enums, errors
 
-async def ban_unban_user(message, action, user_id=None):
+async def ban_unban_user(message, action, user_id):
     me = message.from_user.id
     if user_id == message.from_user.id:
         return await message.reply("⚠️ You can't do this on yourself")
@@ -33,6 +33,7 @@ async def ban_unban_user(message, action, user_id=None):
     await message.reply(f"""**✅ {'Gban' if action == 'ban' else 'Ungban'} Summary 🐬**
 
 **🚫 Successfully baned:** __{success_chats}chats__
+**👤 User:** __{user_id}__
 **🕒 Taken Time:** __{int(time.time() - time_start)}s__
 
 **» 🦋 Join:** __@Hyper_speed0 & @FutureCity005__ ✨🥀
