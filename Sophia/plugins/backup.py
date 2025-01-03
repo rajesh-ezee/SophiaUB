@@ -11,8 +11,6 @@ from Restart import restart_program as restart
 from Sophia.Database.backup_msg import *
 from Sophia.plugins.ignore_bad import pattern
 
-
-
 @Sophia.on_message(filters.command("backup", prefixes=HANDLER) & filters.user(OWNER_ID))
 async def enable_backup(_, message):
     STATUS = await GET_BACKUP()
@@ -24,8 +22,6 @@ async def enable_backup(_, message):
         await message.reply("Successfully disabled backup mode!")
 
                 
-
-
 @Sophia.on_message(filters.command(["resetbackup", "rbackup", "delbackup"], prefixes=HANDLER) & filters.user(OWNER_ID) & filters.private)
 async def delete_backup(_, message):
     USERS = await GET_BACKUP_CHATS()
@@ -33,13 +29,13 @@ async def delete_backup(_, message):
         CH = await GET_BACKUP_CHANNEL_ID(message.chat.id)
         try:
             await SET_BACKUP_CHANNEL_ID(message.chat.id, 0)
-            eee = await message.reply("I have deleted this chat backup!")
             await Sophia.delete_channel(CH)
             await message.reply("I have deleted this chat backup!")
         except Exception as e:
-            if str(e) == """Telegram says: [400 CHANNEL_INVALID] - The channel parameter is invalid (caused by "channels.GetChannels")""" or str(e) == """Peer id invalid: 0""":
-                return await eee.edit("This chat backup channel was already deleted.")
+            if "CHANNEL_INVALID" in str(e):
+                return await message.reply("This chat backup channel was already deleted.")
             await message.reply(f"Error, {e}")
+            logging.error(e)
     else:
         await message.reply("This chat has no backup!")
         
