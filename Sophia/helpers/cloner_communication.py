@@ -2,6 +2,7 @@ from Sophia import *
 from pyrogram import *
 import asyncio
 import aiofiles
+import sys
 from variables import *
 
 # This function used for stop ub using SophiaCloner signel
@@ -14,7 +15,7 @@ async def wait_for_stop_signal():
           await Sophia.send_message('me', "Stop signel received killing process..")
           logging.warn("Stop signel received killing process..")
           await Sophia.stop()
-          exit()
+          sys.exit()
         await asyncio.sleep(10)
     except FileNotFoundError:
       logging.info("Looks like userbot not deployed using SophiaCloner bot")
