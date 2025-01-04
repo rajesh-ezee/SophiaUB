@@ -73,7 +73,7 @@ async def info(_, m):
         user_id = info.id
         if info.last_name == None: User_Name = info.first_name
         else: User_Name = f"{info.first_name} {info.last_name}"
-        if m.reply_to_message.from_user.id in SUDO_USERS_ID: sudo_stats = True
+        if info.id in SUDO_USERS_ID: sudo_stats = True
         else: sudo_stats = False
         first_name = User_Name
         username = info.username
