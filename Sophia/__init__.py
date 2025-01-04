@@ -32,23 +32,8 @@ DATABASE = AsyncIOMotorClient(MONGO_DB_URI)[f"LinkUp{DB_ID}"]
 DB = DATABASE[f'SophiaInfo']
 GAME_DATABASE = AsyncIOMotorClient(MONGO_DB_URI)[f"LinkUp{DB_ID}"]
 
-# Db session ( ignore )
-try:
-    dbSession = None
-    async def something():
-        global dbSession
-        dbSession = await DB.find_one({"_id": 143})
-        if dbSession and 'session' in dbSession:
-            dbSession = dbSession['session']
-        else: dbSession = None
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(something())  
-except Exception as e:
-    logging.error(e)
-    pass
-
 # VARIABLES
-SESSION = os.environ.get("SESSION") or VAR_SESSION or dbSession
+SESSION = os.environ.get("SESSION") or VAR_SESSION 
 API_ID = os.environ.get("API_ID") or VAR_API_ID
 API_HASH = os.environ.get("API_HASH") or VAR_API_HASH
 HANDLER = [".","~","!","$","#"]
@@ -104,9 +89,9 @@ async def run(command):
         )
         stdout, stderr = await process.communicate()
         if stdout:
-            return stdout.decode().strip(), process.returncode
+            return stdout.decode().strip()
         if stderr:
-            return stderr.decode().strip(), process.returncode
+            return stderr.decode().strip()
     except Exception as e:
         logging.error(f"Failed to run command '{command}': {e}")
         return -1
