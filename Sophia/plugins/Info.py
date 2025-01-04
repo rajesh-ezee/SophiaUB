@@ -62,7 +62,7 @@ async def info(_, m):
     if len(m.command) < 2 and not reply:
         return await m.reply_text("ℹ️ Please reply to a user or enter their id 🆔!")
     elif not len(m.command) < 2:
-        id_user = " ".join(message.command[1:]).replace('https://t.me/', '').replace('http://t.me/', '').replace('t.me/', '').replace('https://telegram.dog', '').replace('http://telegram.dog', '').replace('telegram.dog/')
+        id_user = " ".join(message.command[1:]).replace('https://t.me/', '').replace('http://t.me/', '').replace('t.me/', '').replace('https://telegram.dog', '').replace('http://telegram.dog', '').replace('telegram.dog/', '')
     else:
         id_user = m.reply_to_message.from_user.id
     msg = await m.reply_text("`Processing...`")
