@@ -153,16 +153,7 @@ async def play(_, message):
         open(thumb_name, "wb").write(thumb.content)
     await m.edit("📥 Downloading...")
     try:
-        ydl_opts = {
-            "format": "bestaudio[ext=m4a]",
-            "cookiefile": "cookies.txt",
-            "postprocessors": [{
-                "key": "FFmpegAudioConvertor",
-                "preferredcodec": "aac",
-                "preferredquality": "0" 
-            }],
-            "noplaylist": True
-        }
+        ydl_opts = {"format": "bestaudio[ext=m4a]", "cookiefile": "cookies.txt"}
         with YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=True)
             audio_file = ydl.prepare_filename(info_dict)
@@ -170,7 +161,7 @@ async def play(_, message):
         for i in range(len(dur_arr) - 1, -1, -1):
             dur += int(dur_arr[i]) * secmul
             secmul *= 60
-        logging.info(await run(f"ffmpeg -re -i {audio_file} -c:v libx264 -c:a aac -b:a 96k -ar 44100 -f flv pipe:1"))
+        await run(f"ffmpeg -re -i {audio_file} -c:v libx264 -c:a aac -b:a 96k -ar 44100 -f flv pipe:1")
         await m.delete()
         await message.reply_photo(
             photo=thumb_name,
@@ -217,6 +208,7 @@ async def vplay(_, message):
                 file_name = file.file_name or "Unknown Title"
                 title = file_name
                 dur = int(file.duration or 0)
+                await run(f"ffmpeg -re -i {path} -c:v libx264 -c:a aac -b:a 96k -ar 44100 -f flv pipe:1")
                 await m.delete()
                 await message.reply_photo(
                     photo="https://i.imgur.com/9KKPfOA.jpeg",
@@ -266,19 +258,11 @@ async def vplay(_, message):
         open(thumb_name, "wb").write(thumb.content)
     await m.edit("📥 Downloading...")
     try:
-        ydl_opts = {
-            "format": "worstvideo[ext=mp4]+bestaudio/best",
-            "cookiefile": "cookies.txt",
-            "postprocessors": [{
-                "key": "FFmpegVideoConvertor",
-                "preferredcodec": "mp4",
-                "preferredquality": "24" 
-            }],
-            "noplaylist": True
-        }
+        ydl_opts = {"format": "bestaudio[ext=m4a]+bestaudio[ext=mp4]/480p", "cookiefile": "cookies.txt"}
         with YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=True)
             video_file = ydl.prepare_filename(info_dict)
+        await run(f"ffmpeg -re -i {video_file} -c:v libx264 -c:a aac -b:a 96k -ar 44100 -f flv pipe:1")
         await m.delete()
         await message.reply_photo(
             photo=thumb_name,
