@@ -93,3 +93,20 @@ def qfilter(inlineQuery):
         try: return str(query.query).startswith(inlineQuery)
         except: return str(query.data).startswith(inlineQuery)
     return filters.create(funcMano)
+
+async def run(command):
+    try:
+        process = await asyncio.create_subprocess_shell(
+            command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            start_new_session=True
+        )
+        stdout, stderr = await process.communicate()
+        if stdout:
+            return stdout.decode().strip(), process.returncode
+        if stderr:
+            return stderr.decode().strip(), process.returncode
+    except Exception as e:
+        logging.error(f"Failed to run command '{command}': {e}")
+        return -1
