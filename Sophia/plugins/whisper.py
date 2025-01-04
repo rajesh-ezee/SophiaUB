@@ -3,9 +3,7 @@ from pyrogram import *
 import logging
 from pyrogram.types import *
 from config import OWNER_ID
-import json
-from pyrogram import enums
-import traceback 
+import traceback
 from Sophia.Database.whisper import whisper
 
 whs = whisper()
@@ -18,13 +16,11 @@ async def whisper(_, message):
     if not message.reply_to_message:
         return await message.reply("Please reply to someone to whisper!")
     reply = message.reply_to_message
-    data = {
-        'name': f"{reply.from_user.first_name} {reply.from_user.last_name or ''}".strip(),
-        'id': reply.from_user.id,
-        'message': message.text.split(None, 1)[1],
-        'username': reply.from_user.username or 'Nothing'
-    }
-    results = await Sophia.get_inline_bot_results(SophiaBot.me.username, f"whisper: {json.dumps(data)}")
+    data = f"name: {f'{reply.from_user.first_name} {reply.from_user.last_name or ''}'.strip()}\n" \
+           f"id: {reply.from_user.id}\n" \
+           f"message: {message.text.split(None, 1)[1]}\n" \
+           f"username: {reply.from_user.username or 'Nothing'}"
+    results = await Sophia.get_inline_bot_results(SophiaBot.me.username, f"whisper: {data}")
     if results.results:
         await Sophia.send_inline_bot_result(
             chat_id=message.chat.id,
@@ -32,19 +28,21 @@ async def whisper(_, message):
             result_id=results.results[0].id
         )
     else:
-        await message.reply("Error: No result returned by the inline bot.")
+        await message.reply("Error: No result returned by the inline bot, Make sure you have turned on inline in your bot-settings.")
 
 @SophiaBot.on_inline_query(qfilter("whisper: "))
 async def send_whisper(_, query):
     try:
-        data = json.loads(query.query.replace("whisper: ", ""))
-        wid = await whs.add(data['message'], data['id'])
-        mention = f"https://t.me/{data['username']}" if data.get('username') != 'Nothing' else ' '
+        data = query.query.replace("whisper: ", "")
+        data_lines = data.split("\n")
+        data_dict = {line.split(":", 1)[0].strip(): line.split(":", 1)[1].strip() for line in data_lines}
+        wid = await whs.add(data_dict['message'], int(data_dict['id']))
+        mention = f"https://t.me/{data_dict['username']}" if data_dict.get('username') != 'Nothing' else ' '
         button = InlineKeyboardMarkup([[InlineKeyboardButton("View 🔓", callback_data=f"wh: {wid}")]])
         result = InlineQueryResultArticle(
             title="Whisper message",
             input_message_content=InputTextMessageContent(
-                f"🔒 A whisper message to [{data['name']}]({mention}), only they can open it.\n\n{f"**🦋 To:** @{data['username']}" if data['username'] != "Nothing" else ""}\n**👾 By:** SophiaUB",
+                f"🔒 A whisper message to [{data_dict['name']}]({mention}), only they can open it.\n\n{f'**🦋 To:** @{data_dict['username']}' if data_dict['username'] != 'Nothing' else ''}\n**👾 By:** SophiaUB",
                 parse_mode=enums.ParseMode.MARKDOWN,
                 disable_web_page_preview=True
             ),
