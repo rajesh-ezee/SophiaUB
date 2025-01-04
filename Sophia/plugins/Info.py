@@ -62,11 +62,12 @@ async def info(_, m):
     if len(m.command) < 2 and not reply:
         return await m.reply_text("ℹ️ Please reply to a user or enter their id 🆔!")
     elif not len(m.command) < 2:
-        id_user = " ".join(message.command[1:])
+        id_user = " ".join(message.command[1:]).replace('https://t.me/', '').replace('http://t.me/', '')
     else:
         id_user = m.reply_to_message.from_user.id
     msg = await m.reply_text("`Processing...`")
-    info = await Sophia.get_chat(id_user)
+    try: info = await Sophia.get_chat(id_user)
+    except: return await message.reply("🚫 Cannot find chat/user, make sure you entered correct id/username.")
     if info.photo:
         file_id = info.photo.big_file_id
         photo = await Sophia.download_media(file_id)
