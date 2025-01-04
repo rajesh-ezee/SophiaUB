@@ -153,7 +153,7 @@ async def play(_, message):
         open(thumb_name, "wb").write(thumb.content)
     await m.edit("📥 Downloading...")
     try:
-        ydl_opts = {"format": "bestaudio[ext=m4a]", "cookiefile": "cookies.txt"}
+        ydl_opts = {"format": "bestaudio[ext=m4a]", "cookiefile": "cookies.txt", "audioquality": 9, "postprocessors": [{"key": "FFmpegAudioConvertor", "preferredquality": "64", "preferredcodec": "aac"}]}
         with YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=True)
             audio_file = ydl.prepare_filename(info_dict)
@@ -257,10 +257,7 @@ async def vplay(_, message):
         open(thumb_name, "wb").write(thumb.content)
     await m.edit("📥 Downloading...")
     try:
-        ydl_opts = {
-            "format": "worstvideo[ext=mp4]+bestaudio/best" if is_video else "bestaudio[ext=m4a]",
-            "cookiefile": "cookies.txt"
-        }
+        ydl_opts = {"format": "bestaudio[ext=m4a]+bestaudio/best" if not is_video else "worstvideo[ext=mp4]+bestaudio/best", "cookiefile": "cookies.txt", "postprocessors": [{"key": "FFmpegVideoConvertor", "preferredquality": "360", "preferredcodec": "mp4"}], "audioquality": 9, "noplaylist": True}
         with YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=True)
             video_file = ydl.prepare_filename(info_dict)
