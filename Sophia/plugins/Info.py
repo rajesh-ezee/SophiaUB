@@ -57,6 +57,7 @@ no_reply_user = """ ╒═══「 Appraisal results:」
 
 @Sophia.on_message(filters.command("info", prefixes=HANDLER) & filters.user(OWNER_ID))
 async def info(_, m):
+    message = m
     reply = m.reply_to_message
     if len(m.command) < 2 and not reply:
         return await m.reply_text("ℹ️ Please reply to a user or enter their id 🆔!")
@@ -70,14 +71,10 @@ async def info(_, m):
         file_id = info.photo.big_file_id
         photo = await Sophia.download_media(file_id)
         user_id = info.id
-        if info.last_name == None:
-            User_Name = info.first_name
-        else:
-            User_Name = f"{info.first_name} {info.last_name}"
-        if m.reply_to_message.from_user.id in SUDO_USERS_ID:
-            sudo_stats = True
-        else:
-            sudo_stats = False
+        if info.last_name == None: User_Name = info.first_name
+        else: User_Name = f"{info.first_name} {info.last_name}"
+        if m.reply_to_message.from_user.id in SUDO_USERS_ID: sudo_stats = True
+        else: sudo_stats = False
         first_name = User_Name
         username = info.username
         user_bio = info.bio
