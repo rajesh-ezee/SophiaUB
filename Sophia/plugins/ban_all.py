@@ -1,7 +1,3 @@
-# Special Thanks to KoraXD for Giving This Code Follow Him Using this link Github.com/KoraXD
-# We Just Removed or Replaced or some i created, Some codes We not own this Codes This Codes Real Owner Is github.com/KoraXD
-# Thanks To KoraXD
-
 from Sophia import Sophia as bot
 from Sophia import HANDLER
 from config import OWNER_ID as OWN
@@ -34,15 +30,13 @@ async def unbanall(_, message):
                 try:
                     await bot.unban_chat_member(chat_id, m.user.id)
                     unban += 1
-                except:
-                    None 
+                except: pass
                 await asyncio.sleep(0.8)
             await message.reply("Found Banned Members: {}\nUnbanned Successfully: {}".format(len(BANNED), unban))
         except Exception as e:
-            if str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "channels.GetParticipants")""":
-                await message.reply_text("**Sorry**, `I don't have Admin rights to do this!. ❌`")
-                return
-            await message.reply_text(f"**Sorry**, I got a error: `{e}`")
+            if "CHAT_ADMIN_REQUIRED" in str(e):
+                return await message.reply_text("**Sorry**, `I don't have Admin rights to do this!. ❌`")
+            await message.reply_text(f"**Error:** {e}")
             print(e)
 
 @bot.on_message(filters.command("banall", prefixes=HANDLER) & filters.user(OWN))
@@ -70,10 +64,9 @@ async def banall(_, message):
                     await bot.ban_chat_member(chat_id, user_id)
             await message.reply_text("Successfully Banned: {}\nRemaining Admins: {}".format(len(Members), len(Admins)))
         except Exception as e:
-            if str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "channels.EditBanned")""":
-                await message.reply_text("**Sorry**, `I don't have Admin rights to do this!. ❌`")
-                return
-            await message.reply_text(f"**Sorry**, I got a error: `{e}`")
+            if "400 CHAT_ADMIN_REQUIRED" in str(e):
+                return await message.reply_text("You don't have enough admin rights to do this 🚫")
+            await message.reply_text(f"**Error:** {e}")
             print(e)
 
 @bot.on_message(filters.command("kickall", prefixes=HANDLER) & filters.user(OWN))
@@ -103,10 +96,9 @@ async def kickall(_, message):
                     await bot.unban_chat_member(chat_id, user_id)
             await message.reply_text("Successfully Kicked: {}\nRemaining Admins: {}".format(len(Members), len(Admins)))
         except Exception as e:
-            if str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "channels.EditBanned")""":
-                await message.reply_text("**Sorry**, `I don't have Admin rights to do this!. ❌`")
-                return
-            await message.reply_text(f"**Sorry**, I got a error: {e}")
+            if "CHAT_ADMIN_REQUIRED" in str(e):
+                return await message.reply_text("You don't have enough admin rights to do this 🚫")
+            await message.reply_text(f"**Error:** {e}")
             print(e)
 
 MOD_NAME = 'Bans'
