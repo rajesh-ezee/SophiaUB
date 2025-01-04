@@ -81,3 +81,6 @@ async def no_caption_paste_msg(_, message):
             if str(e).startswith("Telegram says: [400 CHAT_FORWARDS_RESTRICTED]"):
                 return await message.reply("Master, Copying forwarding not allowed in that chat so we cannot paste it.")
             await message.reply(f"Error: {e}")
+
+MOD_HELP = "Copy"
+MOD_HELP = ".copy (reply) - To copy that message and paste anywhere (must be that chat allow copy&forwarding)\n.paste - To paste the copied message"
