@@ -15,7 +15,7 @@ async def tts(_, message):
         load = await m.reply('`Loading...`')
         try:
             if not message.reply_to_message or len(" ".join(message.command[1:])) > 2:
-                text = message.text
+                text = message.text.split(None, 1)[1]
                 language = 'en'
             else:
                 text = message.reply_to_message.text
