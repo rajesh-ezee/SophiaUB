@@ -28,3 +28,5 @@ async def echo(_, m):
       if m.reply_to_message:
         return await m.reply_to_message.reply(txt)
       return await Sophia.send_message(m.chat.id, txt)
+MOD_NAME = "Echo"
+MOD_HELP = ".echo (text or reply) - To send that message\n.recho (reply) - To send the message you replied with reply of original message"
