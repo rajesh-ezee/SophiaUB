@@ -67,7 +67,9 @@ async def info(_, m):
         id_user = m.reply_to_message.from_user.id
     msg = await m.reply_text("`Processing...`")
     try: info = await Sophia.get_chat(id_user)
-    except: return await message.reply("🚫 Cannot find chat/user, make sure you entered correct id/username.")
+    except:
+        await msg.delete()
+        return await message.reply("🚫 Cannot find chat/user, make sure you entered correct id/username.")
     if info.photo:
         file_id = info.photo.big_file_id
         photo = await Sophia.download_media(file_id)
