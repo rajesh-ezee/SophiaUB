@@ -37,7 +37,7 @@ async def send_whisper(_, query):
         data_lines = data.split("\n")
         data_dict = {line.split(":", 1)[0].strip(): line.split(":", 1)[1].strip() for line in data_lines}
         wid = await whs.add(data_dict['message'], int(data_dict['id']))
-        mention = f"https://t.me/{data_dict['username']}" if data_dict.get('username') != 'Nothing' else ' '
+        mention = f"tg://user?id={data_dict['id']}"
         button = InlineKeyboardMarkup([[InlineKeyboardButton("View 🔓", callback_data=f"wh: {wid}")]])
         result = InlineQueryResultArticle(
             title="Whisper message",
