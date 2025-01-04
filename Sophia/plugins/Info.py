@@ -71,15 +71,15 @@ async def info(_, m):
         file_id = info.photo.big_file_id
         photo = await Sophia.download_media(file_id)
         user_id = info.id
-        if info.last_name == None: User_Name = info.first_name
+        if not info.last_name: User_Name = info.first_name or info.title
         else: User_Name = f"{info.first_name} {info.last_name}"
         if info.id in SUDO_USERS_ID: sudo_stats = True
         else: sudo_stats = False
         first_name = User_Name
         username = info.username
-        user_bio = info.bio
+        user_bio = info.bio or info.description[:40]
         dc_id = info.dc_id
-        user_link = f"[Link](tg://user?id={user_id})"
+        user_link = f"[Link](tg://user?id={user_id})" if not str(user_id).startswith('-') else f"[Link](https://t.me/{username})"
         is_sudo = sudo_stats
         await m.reply_photo(
             photo=photo,
@@ -90,18 +90,18 @@ async def info(_, m):
     elif not info.photo:
         user_id = info.id
         if info.last_name == None:
-            User_Name = info.first_name
+            User_Name = info.first_name or info.title
         else:
             User_Name = f"{info.first_name} {info.last_name}"
-        if m.reply_to_message.from_user.id in SUDO_USERS_ID:
+        if info.id in SUDO_USERS_ID:
             sudo_stats = True
         else:
             sudo_stats = False
         full_name = User_Name
         username = info.username
-        user_bio = info.bio
+        user_bio = info.bio or info.description[:40]
         dc_id = info.dc_id
-        user_link = f"[Link](tg://user?id={user_id})"
+        user_link = f"[Link](tg://user?id={user_id})" if not str(user_id).startswith('-') else f"[Link](https://t.me/{username})"
         is_sudo = sudo_stats
         await m.reply_text(
             text=no_reply_user.format(
