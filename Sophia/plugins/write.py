@@ -21,4 +21,4 @@ async def write(_, message):
     await m.delete()
   
 MOD_NAME = 'Write'
-MOD_HELP = '.write (text) - To get that text in notebook page."
+MOD_HELP = ".write (text) - To get that text in notebook page."
