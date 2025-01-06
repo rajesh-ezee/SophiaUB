@@ -6,12 +6,14 @@ reverse_keypad = {v: k for k, v in keypad.items()}
 
 @Sophia.on_message(filters.command("kencode", prefixes=HANDLER) & filters.user("me"))
 async def keypad_encode(_, message):
+  if len(message.command) < 2: return await message.reply("Please give a text to encode")
   text = message.text.split(None, 1)[1]
   encoded = ','.join(str(keypad[c]) for c in text.upper() if c in keypad)
   await message.reply(f"**Encoded text:** {encoded}")
   
-Sophia.on_message(filters.command("kdecode", prefixes=HANDLER) & filters.user("me"))
+@Sophia.on_message(filters.command("kdecode", prefixes=HANDLER) & filters.user("me"))
 async def keypad_decode(_, message):
+  if len(message.command) < 2: return await message.reply("Please give a encoded text to decode")
   sequence = message.text.split(None, 1)[1]
   decoded = ''.join(reverse_keypad.get(int(num), '') for num in sequence.split(','))
   await message.reply(f"**Decoded text:** {decoded}")
