@@ -16,8 +16,7 @@ async def broadcast_all(_, message):
                     msg = await Sophia.forward_messages(dialog.chat.id, message.chat.id, message.reply_to_message_id)
                     SUCCESS += 1
                     await asyncio.sleep(0.5)
-                    await Sophia.pin_chat_message(dialog.chat.id, msg.id, disable_notification=True, both_sides=True)
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5)
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
@@ -31,9 +30,7 @@ async def broadcast_all(_, message):
                 try:
                     msg = await Sophia.send_message(dialog.chat.id, text)
                     SUCCESS += 1
-                    await asyncio.sleep(0.5)
-                    await Sophia.pin_chat_message(dialog.chat.id, msg.id, disable_notification=True, both_sides=True)
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5)
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
@@ -49,9 +46,7 @@ async def GroupCast(_, message):
                 try:
                     msg = await Sophia.forward_messages(dialog.chat.id, message.chat.id, message.reply_to_message_id)
                     SUCCESS += 1
-                    await asyncio.sleep(0.5)
-                    await Sophia.pin_chat_message(dialog.chat.id, msg.id, disable_notification=True, both_sides=True)
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5)
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
@@ -65,9 +60,7 @@ async def GroupCast(_, message):
                 try:
                     msg = await Sophia.send_message(dialog.chat.id, text)
                     SUCCESS += 1
-                    await asyncio.sleep(0.5)
-                    await Sophia.pin_chat_message(dialog.chat.id, msg.id, disable_notification=True, both_sides=True)
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5)
                 except Exception as e:
                     if not str(e) == """Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.UpdatePinnedMessage")""" and not str(e).startswith("Telegram says: [420 FLOOD_WAIT_X] - A wait"):
                         FAILED += 1
@@ -83,7 +76,7 @@ async def UserCast(_, message):
                 try:
                     msg = await Sophia.forward_messages(dialog.chat.id, message.chat.id, message.reply_to_message_id)
                     SUCCESS += 1
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(4)
                 except Exception as e:
                     FAILED += 1
         await message.reply(f"**Usercast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
@@ -96,7 +89,7 @@ async def UserCast(_, message):
                 try:
                     msg = await Sophia.send_message(dialog.chat.id, text)
                     SUCCESS += 1
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(4)
                 except Exception as e:
                     FAILED += 1
         await message.reply(f"**Usercast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
@@ -111,7 +104,7 @@ async def Channelcast(_, message):
                 try:
                     await Sophia.forward_messages(dialog.chat.id, message.chat.id, message.reply_to_message_id)
                     SUCCESS += 1
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5.2)
                 except Exception as e:
                     FAILED += 1
         await message.reply(f"**Channelcast Summary**\n\n**✅ Success:** {SUCCESS}\n**❌ Failed:** {FAILED}\n\n**Operation Completed successfully!**")
