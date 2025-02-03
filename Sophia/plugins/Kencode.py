@@ -18,5 +18,5 @@ async def keypad_decode(_, message):
   decoded = ''.join(reverse_keypad.get(int(num), '') for num in sequence.split(','))
   await message.reply(f"**Decoded text:** {decoded}")
 
-MOD_NAME = "Keypad encode"
+MOD_NAME = "encode"
 MOD_HELP = ".kencode <text> - To get keypad style encoded text\n.kdecode <text> - To decode encode text"
