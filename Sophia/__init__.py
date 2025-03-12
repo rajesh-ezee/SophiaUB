@@ -54,10 +54,8 @@ what_is_new = f"""Update {MY_VERSION} changelog:\n
 7. Bug fixes, Etc
 """
 if not SESSION or not API_ID or not API_HASH or not MONGO_DB_URI or not REPO_URL or not TOKEN:
-    raise "Values not found"
-    logging.error("You should enter the required details on variables.py or you need set env")
-    exit()
-
+    raise Exception("Values not found")
+    
 # PRINT STUFFS
 logging.info(f"Loaded version: {MY_VERSION}")
 
