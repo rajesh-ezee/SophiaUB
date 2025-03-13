@@ -5,6 +5,7 @@ from pyrogram.types import *
 raids = {}
 
 async def raid(_, __, m):
+  await m.reply("Debug 8: yes")
   if raids and m.chat.id in raids:
     return True
 
@@ -19,6 +20,7 @@ async def raid_setting(_, m):
 
 @Sophia.on_message(filters.new_chat_members & filters.create(raid))
 async def BanMfs(_, m):
+  await m.reply("Debug 22: yes")
   await m.chat.ban_member(m.from_user.id)
   
 MOD_NAME = "Antiraid"
