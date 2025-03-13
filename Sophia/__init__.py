@@ -56,9 +56,6 @@ what_is_new = f"""Update {MY_VERSION} changelog:\n
 if not SESSION or not API_ID or not API_HASH or not MONGO_DB_URI or not REPO_URL or not TOKEN:
   raise Exception("Values not found")
     
-# PRINT STUFFS
-logging.info(f"Loaded version: {MY_VERSION}")
-
 # GETTING REPO NAME USED FOR UPDATE MODULE
 parsed_url = urlparse(REPO_URL)
 path_parts = parsed_url.path.split('/')
@@ -72,10 +69,10 @@ SophiaVC = PyTgCalls(Sophia)
 
 # Functions
 def qfilter(inlineQuery):
-    async def funcMano(_, __, query):
-        try: return str(query.query).startswith(inlineQuery)
-        except: return str(query.data).startswith(inlineQuery)
-    return filters.create(funcMano)
+  async def funcMano(_, __, query):
+    try: return str(query.query).startswith(inlineQuery)
+    except: return str(query.data).startswith(inlineQuery)
+  return filters.create(funcMano)
 
 async def run(command):
     try:
