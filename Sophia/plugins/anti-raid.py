@@ -8,7 +8,7 @@ async def raid(_, __, m):
   if raids and m.chat.id in raids:
     return True
 
-@Sophia.on_message(filters.command('antiraid') & filters.me & filters.group):
+@Sophia.on_message(filters.command('antiraid') & filters.me & filters.group)
 async def raid_setting(_, m):
   global raids
   if m.chat.id in raids:
