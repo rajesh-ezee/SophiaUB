@@ -1,15 +1,15 @@
 from Sophia import *
 from pyrogram import *
 from pyrogram.types import *
+from datetime import *
 
 raids = {}
 
 async def raid(_, __, m):
-  await m.reply("Debug 8: yes")
   if raids and m.chat.id in raids:
     return True
 
-@Sophia.on_message(filters.command('antiraid') & filters.me & filters.group)
+@Sophia.on_message(filters.command('antiraid', prefixes=HANDLER) & filters.me & filters.group)
 async def raid_setting(_, m):
   global raids
   if m.chat.id in raids:
@@ -20,8 +20,7 @@ async def raid_setting(_, m):
 
 @Sophia.on_message(filters.new_chat_members & filters.create(raid))
 async def BanMfs(_, m):
-  await m.reply("Debug 22: yes")
-  await m.chat.ban_member(m.from_user.id)
+  await m.chat.ban_member(m.from_user.id, datetime.utcnow() + timedelta(hours=1))
   
 MOD_NAME = "Antiraid"
 MOD_HELP = "soon."
