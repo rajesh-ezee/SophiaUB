@@ -23,4 +23,4 @@ async def BanMfs(_, m):
   await m.chat.ban_member(m.from_user.id, datetime.utcnow() + timedelta(hours=1))
   
 MOD_NAME = "Antiraid"
-MOD_HELP = "soon."
+MOD_HELP = "soonn"
