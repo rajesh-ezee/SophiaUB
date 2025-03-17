@@ -13,7 +13,7 @@ async def purge_messages(_, message):
     return await message.reply("Reply to the message you want to delete from.")
   start = message.reply_to_message.id
   end = message.id
-  for x in range(start, end_msg_id + 1, 100):
+  for x in range(start, end + 1, 100):
     try:
       x = list(range(x+1, x+101))
       await Sophia.delete_messages(message.chat.id, x)
