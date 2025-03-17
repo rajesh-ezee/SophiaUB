@@ -3,6 +3,7 @@ from Sophia.__main__ import Sophia
 from Sophia import HANDLER
 import asyncio
 from pyrogram.enums import ChatType
+import logging
 
 @Sophia.on_message(filters.command("purge", prefixes=HANDLER) & filters.me)
 async def purge_messages(_, message):
@@ -20,3 +21,6 @@ async def purge_messages(_, message):
     except Exception as e:
       logging.error(f"Error deleting message {x}: {str(e)}")
   await message.reply("Purge complete.")
+  
+MOD_NAME = "Purge"
+MOD_HELP = ".purge <reply> - To delete all messages from you replied one."

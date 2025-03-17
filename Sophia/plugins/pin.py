@@ -48,3 +48,5 @@ async def unpin_message(_, message):
 
 MOD_NAME = 'Pin'
 MOD_HELP = ".pin (reply) - To pin the replied message!\n.unpin (reply) - To unpin the replied message!"
+
+# Rewrite soonnnn!!!! @DevsBase™
