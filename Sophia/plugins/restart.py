@@ -11,7 +11,7 @@ async def restart(_, message):
   if message.command[0] == 'trestart':
     try:
       txt = " ".join(message.command[1:])
-      if int(txt[:-1]) <= 5:
+      if int(txt[:-1]) <= 5 and txt.endswith('s'):
         return await message.reply("Time should be greater than 5 sec.")
       x = await GetTime(txt)
       await message.edit(f"Done! userbot will be restarted in {txt}")
