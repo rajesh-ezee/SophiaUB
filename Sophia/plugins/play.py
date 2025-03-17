@@ -14,12 +14,10 @@ from pytgcalls.types import MediaStream
 from Sophia.Database.play import *
 from pyrogram.types import *
 
-PLAYPREFIXES = HANDLER
-PLAYPREFIXES += ["/"]
 oh = play()
 Sophia = bot
 async def publicFilter(_, client, message):
-    if not message.text.startswith(tuple(PLAYPREFIXES)): return False
+    if not message.text.startswith(tuple(HANDLER)): return False
     if message.from_user.id == OWN: return True
     if message.chat.id in await oh.get() and message.text.startswith(("/", ".", "$")): return True
     return False
@@ -85,7 +83,7 @@ async def play_filter(_, client, message):
         id = await make_queue(message.chat.id)
         if id == 1: return True
             
-@bot.on_message(filters.command(["play", "sp"], prefixes=PLAYPREFIXES) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command(["play", "sp"], prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
 async def play(_, message):
     global is_playing, queue_id
     try: await SophiaVC.start()
@@ -192,7 +190,7 @@ async def play(_, message):
         os.remove(thumb_name)
     except Exception as e: logging.error(e)
 
-@bot.on_message(filters.command("vplay", prefixes=PLAYPREFIXES) & filters.create(publicFilter) & filters.create(play_filter) & filters.user(OWN) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command("vplay", prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & filters.user(OWN) & ~filters.private & ~filters.bot)
 async def vplay(_, message):
     global is_playing, queue_id
     try: await SophiaVC.start()
@@ -296,7 +294,7 @@ async def manage_playback(chat_id, title, duration):
             await SophiaVC.leave_call(chat_id)
     except Exception as e: logging.error(e)
 
-@bot.on_message(filters.command("skip", prefixes=PLAYPREFIXES) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command("skip", prefixes=HANDLER) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
 async def skip(_, message):
     global queue_id, is_playing
     a = await Sophia.get_chat_member(message.chat.id, message.from_user.id)

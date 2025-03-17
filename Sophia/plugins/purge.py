@@ -9,23 +9,14 @@ async def purge_messages(_, message):
   if message.chat.type == ChatType.PRIVATE:
     return await message.reply("This command only works in groups!")
   if not message.reply_to_message:
-    return await message.reply("Reply to the first message you want to delete.")
-  start_msg_id = message.reply_to_message.id
-  end_msg_id = message.id
-  success = 0
-  breaked = False
-  for msg_id in range(start_msg_id, end_msg_id + 1):
+    return await message.reply("Reply to the message you want to delete from.")
+  start = message.reply_to_message.id
+  end = message.id
+  for x in range(start, end_msg_id + 1, 100):
     try:
-      await Sophia.delete_messages(message.chat.id, msg_id)
-      success += 1
-      await asyncio.sleep(0.3)
-      if success >= 100:
-        break
-        breaked = True
+      x = list(range(x+1, x+101))
+      await Sophia.delete_messages(message.chat.id, x)
+      await asyncio.sleep(1.2)
     except Exception as e:
-      print(f"Error deleting message {msg_id}: {str(e)}")
-  if breaked:
-    await message.reply("Successfully purged 100 messages, I can only delete 100. Try again!")
-    breaked = False
-    return
-  await message.reply(f"Successfully purged {success} messages!")
+      logging.error(f"Error deleting message {x}: {str(e)}")
+  await message.reply("Purge complete.")
