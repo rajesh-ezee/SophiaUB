@@ -12,7 +12,7 @@ async def spam(_, message):
   m = message
   if m.command[0] == 'sspam':
     del data[m.chat.id]
-    await m.reply("Spam stopped.")
+    return await m.reply("Spam stopped.")
   elif data.get(m.chat.id):
     return await m.reply("There's an ongoing spam going on this chat, so yeah you can't use multipul spams.")
   if message.reply_to_message:
