@@ -17,7 +17,7 @@ async def purge_messages(_, message):
     try:
       x = list(range(x+1, x+101))
       await Sophia.delete_messages(message.chat.id, x)
-      await asyncio.sleep(1.2)
+      await asyncio.sleep(2)
     except Exception as e:
       logging.error(f"Error deleting message {x}: {str(e)}")
   await message.reply("Purge complete.")

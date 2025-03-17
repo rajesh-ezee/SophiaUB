@@ -6,7 +6,7 @@ import asyncio
 import os
 
 data = {}
-@Sophia.on_message(filters.command(['spam', 'sspam', 'slspam', 'dspam']) & filters.me)
+@Sophia.on_message(filters.command(['spam', 'sspam', 'slspam', 'dspam'], prefixes=HANDLER) & filters.me)
 async def spam(_, message):
   global data
   m = message
@@ -15,7 +15,7 @@ async def spam(_, message):
     await m.reply("Spam stopped.")
   elif data.get(m.chat.id):
     return await m.reply("There's an ongoing spam going on this chat, so yeah you can't use multipul spams.")
-  if hasattr(message, 'reply_to_message'):
+  if message.reply_to_message:
     r = message.reply_to_message
     data[m.chat.id] = True
     while data.get(message.chat.id):
