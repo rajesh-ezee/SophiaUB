@@ -7,7 +7,7 @@ raids = {}
 
 async def raid(_, __, m):
   if raids and m.chat.id in raids:
-    return True
+    await m.chat.ban_member(m.from_user.id, datetime.utcnow() + timedelta(hours=1))
 
 @Sophia.on_message(filters.command('antiraid', prefixes=HANDLER) & filters.me & filters.group)
 async def raid_setting(_, m):
@@ -20,7 +20,6 @@ async def raid_setting(_, m):
 
 @Sophia.on_message(filters.new_chat_members & filters.create(raid))
 async def BanMfs(_, m):
-  await m.chat.ban_member(m.from_user.id, datetime.utcnow() + timedelta(hours=1))
-  
+  pass  
 MOD_NAME = "Antiraid"
 MOD_HELP = "soonn"
