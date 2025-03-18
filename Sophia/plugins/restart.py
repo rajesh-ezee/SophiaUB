@@ -19,5 +19,6 @@ async def restart(_, message):
       fk, s, n, e = await message.edit(f"Done! userbot will be restarted in {txt}"), datetime.now(ist).strftime("%H:%M:%S"), await asyncio.sleep(x), datetime.now(ist).strftime("%H:%M:%S")
       await SophiaBot.send_message(message.from_user.id, f"**🔴 Restarting...**\n\n**🕐 Set on:** {s}\n**⌚ End on:** {e}\n\n**Powered by:** @DevsBase!")
     except: return await message.edit("Nooo, this is not correct time format.\nUse: `.trestart 1h`")
-  await message.edit("Restarting...")
+  try: await message.edit("Restarting...")
+  except: pass
   restart_program()
