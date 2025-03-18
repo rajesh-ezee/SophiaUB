@@ -15,9 +15,9 @@ from Restart import restart_program as rs_pg
 
 # LOGGING
 logging.basicConfig(
-    format="[Sophia-Beta] %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
-    level=logging.INFO,
+  format="[Sophia-Beta] %(name)s - %(levelname)s - %(message)s",
+  handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
+  level=logging.DEBUG,
 )
 
 # DATABASE
