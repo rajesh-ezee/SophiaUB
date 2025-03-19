@@ -19,6 +19,7 @@ async def unbanall(_, message):
     return await message.reply("Sorry, This Command Only works in Groups!")
   else:
     try:
+      msg = await message.reply("Processing...")
       BANNED, unban = [], 0
       async for m in Sophia.get_chat_members(chat_id, filter=enums.ChatMembersFilter.BANNED):
         BANNED.append(m.user.id)
@@ -43,6 +44,7 @@ async def banall(_, message):
     return await message.reply("This Command Only works in Groups!")
   else:
     try:
+      msg = await message.reply("Processing...")
       Members, Admins = [], []
       async for x in Sophia.get_chat_members(chat_id):
         if not x.privileges: Members.append(x.user.id)
@@ -66,6 +68,7 @@ async def kickall(_, message):
   elif message.chat.type == enums.ChatType.PRIVATE:
     return await message.reply("This Command Only works in Groups!")
   else:
+    msg = await message.reply("Processing...")
     try:
       Admins, Members = [], []
       async for x in Sophia.get_chat_members(chat_id):
