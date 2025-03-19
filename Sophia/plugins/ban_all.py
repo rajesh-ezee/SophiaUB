@@ -9,7 +9,7 @@ from pyrogram import enums
 info = logging.info
 async def is_admin(chat_id: int, user_id: int):
   member = await Sophia.get_chat_member(chat_id, user_id)
-  return member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.CREATOR]
+  return member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER]
 
 @Sophia.on_message(filters.command("unbanall", prefixes=HANDLER) & filters.user(OWN))
 async def unbanall(_, message):
