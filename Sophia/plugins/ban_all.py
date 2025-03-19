@@ -7,7 +7,7 @@ import asyncio
 
 info = logging.info
 async def is_admin(chat_id: int, user_id: int):
-  member = await Sophia.get_chat_members(chat_id)
+  member = await Sophia.get_chat_member(chat_id, user_id)
   return member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.CREATOR]
 
 @Sophia.on_message(filters.command("unbanall", prefixes=HANDLER) & filters.user(OWN))
