@@ -4,6 +4,7 @@ from config import OWNER_ID as OWN
 from pyrogram import *
 from pyrogram.types import *
 import asyncio
+from pyrogram import enums
 
 info = logging.info
 async def is_admin(chat_id: int, user_id: int):
