@@ -1,12 +1,10 @@
-from Sophia import HANDLER
-from Sophia.__main__ import Sophia
-from config import OWNER_ID
+from Sophia import *
 from pyrogram import filters
 
-@Sophia.on_message(filters.command(['del', 'delete', 'd'], prefixes=HANDLER) & filters.user(OWNER_ID))
+@Sophia.on_message(filters.command(['del', 'delete', 'd'], prefixes=HANDLER) & filters.me)
 async def message_del(_, message):
   if message.reply_to_message:
-    await Sophia.delete_messages(message.chat.id, message.reply_to_message_id)
+    await Sophia.delete_messages(message.chat.id, message.reply_to_message.id)
     await Sophia.delete_messages(message.chat.id, message.id)
   else:
     message_id = " ".join(message.command[1:])
