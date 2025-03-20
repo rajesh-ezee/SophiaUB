@@ -7,7 +7,6 @@ import logging
 silent, info = Silent(), logging.info
 
 async def SilentFilter(_, __, m):
-  info("Triggered v2")
   if await silent.get() and m.chat.id not in await silent.get_exceptions():
     try:
       await Sophia.read_chat_history(m.chat.id)
@@ -16,16 +15,18 @@ async def SilentFilter(_, __, m):
     except: pass
   return False
 
-@Sophia.on_message(filters.command('silent') & filters.me)
-async def silentt(_, m):
-  info("Triggered")
+@Sophia.on_message(filters.command('silent', prefixes=HANDLER) & filters.me)
+async def SetSilent(_, m):
   x = await silent.get()
   if x:
     await silent.off()
-    return await m.reply("Ilovedher")
-  else:
-    await silent.on()
-    return await m.reply("True")
+    return await m.reply("Successfully, disabled silent mode.")
+  await silent.on()
+  await m.reply("Success! all your new messages will be marked as read.")
+  try:
+    async for x in Sophia.get_dialogs():
+      await SilentFilter(1, 43, x)
+  except: pass
     
 @Sophia.on_message(~filters.me & filters.create(SilentFilter))
 @Sophia.on_message_reaction(~filters.me & filters.create(SilentFilter))
