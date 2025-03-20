@@ -23,7 +23,7 @@ async def silent(_, m):
     await silent.on()
     return await m.reply("True")
     
-@app.on_message(~filters.me & filters.create(SilentFilter))
-@app.on_message_reaction(~filters.me & filters.create(SilentFilter))
+@Sophia.on_message(~filters.me & filters.create(SilentFilter))
+@Sophia.on_message_reaction(~filters.me & filters.create(SilentFilter))
 async def do_ntg(_, __):
   pass
