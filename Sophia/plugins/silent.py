@@ -1,12 +1,12 @@
 from pyrogram import *
 from Sophia import *
-from ..Database.silent import Silent
 import asyncio
+from ..Database.silent import Silent
 
 silent = Silent()
 
 async def SilentFilter(_, __, m):
-  if await silent.get() & m.chat.id not in await silent.get_exceptions():
+  if await silent.get() and m.chat.id not in await silent.get_exceptions():
     try:
       await Sophia.read_chat_history(m.chat.id)
       await Sophia.read_mentions(m.chat.id)
