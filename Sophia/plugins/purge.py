@@ -5,7 +5,7 @@ import asyncio
 from pyrogram.enums import ChatType
 import logging
 
-@Sophia.on_message(filters.command("purge", prefixes=HANDLER) & filters.me)
+@Sophia.on_message(filters.command("purge", prefixes=HANDLER) & filters.me & filters.group)
 async def purge_messages(_, message):
   if not message.reply_to_message:
     return await message.reply("Reply to the message you want to delete from.")

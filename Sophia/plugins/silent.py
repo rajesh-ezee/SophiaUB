@@ -23,10 +23,6 @@ async def SetSilent(_, m):
     return await m.reply("Successfully, disabled silent mode.")
   await silent.on()
   await m.reply("Success! all your new messages will be marked as read.")
-  try:
-    async for x in Sophia.get_dialogs():
-      await SilentFilter(1, 43, x)
-  except: pass
     
 @Sophia.on_message(~filters.me & filters.create(SilentFilter))
 @Sophia.on_message_reaction(~filters.me & filters.create(SilentFilter))
