@@ -12,6 +12,7 @@ async def SilentFilter(_, __, m):
       await Sophia.read_mentions(m.chat.id)
       await Sophia.read_reactions(m.chat.id)
     except: pass
+  return False
 
 @Sophia.on_message(filters.command('silent') & filters.me)
 async def silentt(_, m):
