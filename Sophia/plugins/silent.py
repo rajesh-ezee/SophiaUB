@@ -14,7 +14,7 @@ async def SilentFilter(_, __, m):
     except: pass
 
 @Sophia.on_message(filters.command('silent') & filters.me)
-async def silent(_, m):
+async def silentt(_, m):
   x = await silent.get()
   if x:
     await silent.off()
