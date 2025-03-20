@@ -2,10 +2,12 @@ from pyrogram import *
 from Sophia import *
 import asyncio
 from ..Database.silent import Silent
+import logging
 
-silent = Silent()
+silent, info = Silent(), logging.info
 
 async def SilentFilter(_, __, m):
+  info("Triggered v2")
   if await silent.get() and m.chat.id not in await silent.get_exceptions():
     try:
       await Sophia.read_chat_history(m.chat.id)
@@ -16,6 +18,7 @@ async def SilentFilter(_, __, m):
 
 @Sophia.on_message(filters.command('silent') & filters.me)
 async def silentt(_, m):
+  info("Triggered")
   x = await silent.get()
   if x:
     await silent.off()
