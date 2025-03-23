@@ -23,6 +23,16 @@ async def SetSilent(_, m):
     return await m.reply("Successfully, disabled silent mode.")
   await silent.on()
   await m.reply("Success! all your new messages will be marked as read.")
+  
+@Sophia.on_message(filters.command('psilent', prefixes=HANDLER) & filters.me)
+async def PauseSilent(_, m):
+  await silent.add_exception(m.chat.id)
+  await m.reply("Chat notifications are paused.")
+
+@Sophia.on_message(filters.command(['rsilent', 'upsilent'], prefixes=HANDLER) & filters.me)
+async def ResumeSilent(_, m):
+  await silent.remove_exception(m.chat.id)
+  await m.reply("Chat notifications are unpaused.")
     
 @Sophia.on_message(~filters.me & filters.create(SilentFilter))
 @Sophia.on_message_reaction(~filters.me & filters.create(SilentFilter))
