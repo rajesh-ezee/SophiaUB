@@ -38,3 +38,6 @@ async def ResumeSilent(_, m):
 @Sophia.on_message_reaction(~filters.me & filters.create(SilentFilter))
 async def do_ntg(_, __):
   pass
+  
+MOD_NAME = "Silent"
+MOD_HELP = "sooon..."
