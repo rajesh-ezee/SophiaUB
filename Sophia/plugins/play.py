@@ -167,7 +167,7 @@ async def play(_, message):
                 f"**🐬 Duration:** {dur // 60}:{dur % 60:02d} Mins\n"
                 f"**🦋 Stream Type:** Audio\n"
                 f"**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n"
-                f"**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
+                f"**⚕️ Join:** __@HeartBeat_Muzic"
             )
         )
         is_playing[message.chat.id] = True
