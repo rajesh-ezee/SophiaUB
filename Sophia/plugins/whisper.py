@@ -40,7 +40,7 @@ async def send_whisper(_, query):
     result = InlineQueryResultArticle(
       title="Whisper message",
       input_message_content=InputTextMessageContent(
-        f"🔒 A whisper message to [{data_dict['name']}]({mention}), only they can open it.\n\n{to_user}\n**👾 By:** SophiaUB",
+        f"🔒 A whisper message to [{data_dict['name']}]({mention}), only they can open it.\n\n{to_user}\n**👾 By:**𝐇𝐞𝐚𝐫𝐭𝐁𝐞𝐚𝐭-✗-𝐁𝐨𝐭",
         parse_mode=enums.ParseMode.MARKDOWN,
         disable_web_page_preview=True
       ),
@@ -65,4 +65,4 @@ async def show_whisper(_, query):
     logging.error(e)
 
 MOD_NAME = "Whisper"
-MOD_HELP = ".whisper <text & reply> - To send a message privately like @WhisperBot!"
+MOD_HELP = ".whisper <text & reply> - To send a message privately!"
