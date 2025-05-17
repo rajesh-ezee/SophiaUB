@@ -40,8 +40,8 @@ async def send_btns(_, query):
     ])
     result = InlineQueryResultPhoto(
       photo_url="https://i.imgur.com/lgzEDVh.jpeg",
-      caption="""**✦ 𝙎𝙤𝙥𝙝𝙞𝙖 𝙎𝙮𝙨𝙩𝙚𝙢 ⚕️**\n
-**__🍃 Sophia is a next-generation 🧩 userbot designed 👾 to automate and simplify your Telegram experience 🦋. 🥀 ✨__**
+      caption="""**𝅗ـﮩ٨ـ𝅽𝅾𓆩𝐇𖽞𖽖֯֟፝͢͡𖽸𖾓𝂬𓏲ࣹ᷼𝄢𝂬𝐁𖽞֟֠֯፝͢͡𖽖𖾓𓆪ﮩ٨ـ𝅽𝅾‐𝅘**\n
+**__🍃 𝐇𝐞𝐚𝐫𝐭𝐁𝐞𝐚𝐭-✗-𝐁𝐨𝐭 designed 👾 to automate and simplify your Telegram experience 🦋. 🥀 ✨__**
 
 **👇 Explore the Features Below ✅**
       """,
@@ -84,7 +84,7 @@ async def show_settings(_, query):
         return await query.answer('This is not for you!', show_alert=False)
   await query.answer("Coming soon", show_alert=False)
 
-@Sophia.on_message(filters.command(["sophia", "stats"], prefixes=HANDLER) & filters.user(OWNER_ID))
+@Sophia.on_message(filters.command(["hbs", "stats"], prefixes=HANDLER) & filters.user(OWNER_ID))
 async def send_stats(_, message):
     results = await Sophia.get_inline_bot_results(SophiaBot.me.username, 'IRLYMANOFR')
     await Sophia.send_inline_bot_result(
@@ -94,5 +94,5 @@ async def send_stats(_, message):
     )
 
 
-MOD_NAME = 'Sophia'
-MOD_HELP = ".sophia | .stats - To get info of userbot & change settings of userbot."
+MOD_NAME = 'HeartBeat'
+MOD_HELP = ".hbs | .stats - To get info of userbot & change settings of userbot."
