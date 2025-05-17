@@ -83,7 +83,7 @@ async def play_filter(_, client, message):
         id = await make_queue(message.chat.id)
         if id == 1: return True
             
-@bot.on_message(filters.command(["play", "sp"], prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command(["play", "ply"], prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & ~filters.private & ~filters.bot)
 async def play(_, message):
     global is_playing, queue_id
     try: await SophiaVC.start()
@@ -105,7 +105,7 @@ async def play(_, message):
                         f"**🐬 Duration:** {dur // 60}:{dur % 60:02d} Mins\n"
                         f"**🦋 Stream Type:** Telegram audio\n"
                         f"**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n"
-                        f"**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
+                        f"**⚕️ Join:** __@HeartBeat_Muzic"
                     )
                 )
                 is_playing[message.chat.id] = True
@@ -190,7 +190,7 @@ async def play(_, message):
         os.remove(thumb_name)
     except Exception as e: logging.error(e)
 
-@bot.on_message(filters.command("vplay", prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & filters.user(OWN) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command("vply", prefixes=HANDLER) & filters.create(publicFilter) & filters.create(play_filter) & filters.user(OWN) & ~filters.private & ~filters.bot)
 async def vplay(_, message):
     global is_playing, queue_id
     try: await SophiaVC.start()
@@ -206,8 +206,8 @@ async def vplay(_, message):
                 dur = int(file.duration or 0)
                 await m.delete()
                 await message.reply_photo(
-                    photo="https://i.imgur.com/9KKPfOA.jpeg",
-                    caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {dur // 60}:{dur % 60:02d} Mins\n**🦋 Stream Type:** Telegram video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
+                    photo="https://graph.org/file/ffdb1be822436121cf5fd.png",
+                    caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {dur // 60}:{dur % 60:02d} Mins\n**🦋 Stream Type:** Telegram video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** @HeartBeat_Muzic"
                 )
                 is_playing[message.chat.id] = True
                 await SophiaVC.play(message.chat.id, MediaStream(path))
@@ -263,7 +263,7 @@ async def vplay(_, message):
         await m.delete()
         await message.reply_photo(
             photo=thumb_name,
-            caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {duration // 60}:{duration % 60:02d} Mins\n**🦋 Stream Type:** Video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** __@Hyper_Speed0 & @FutureCity005__"
+            caption=f"**✅ Started Streaming On VC.**\n\n**🥀 Title:** {title[:20] if len(title) > 20 else title}\n**🐬 Duration:** {duration // 60}:{duration % 60:02d} Mins\n**🦋 Stream Type:** Video\n**👾 Requested By:** {message.from_user.first_name if not message.from_user.last_name else f'{message.from_user.first_name} {message.from_user.last_name}'}\n**⚕️ Join:** @HeartBeat_Muzic"
         )
         is_playing[message.chat.id] = True
         await SophiaVC.play(message.chat.id, MediaStream(video_file))
@@ -294,7 +294,7 @@ async def manage_playback(chat_id, title, duration):
             await SophiaVC.leave_call(chat_id)
     except Exception as e: logging.error(e)
 
-@bot.on_message(filters.command("skip", prefixes=HANDLER) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
+@bot.on_message(filters.command("skp", prefixes=HANDLER) & filters.create(publicFilter) & ~filters.private & ~filters.bot)
 async def skip(_, message):
     global queue_id, is_playing
     a = await Sophia.get_chat_member(message.chat.id, message.from_user.id)
@@ -319,15 +319,15 @@ async def skip(_, message):
 
 MOD_NAME = "Play"
 MOD_HELP = """**🥀 Your commands**:
-.play - To play a song in voice chat
-.vplay - To play a youtube video on voice chat
+.ply - To play a song in voice chat
+.vply - To play a youtube video on voice chat
 .skip - To skip a playing song/video
 .addplay - To allow a chat to use GroupUsers commands
 .rplay - To remove permission of a chat to use GroupUsers commands
 .getplay - To get allowed permission chats of GroupUsers commands
 
 **👤 GroupUsers commands**:
-.play - To play a song in voice chat
-.vplay - To play a youtube video on voice chat
+.ply - To play a song in voice chat
+.vply - To play a youtube video on voice chat
 .skip - To skip a playing song/video
 """
