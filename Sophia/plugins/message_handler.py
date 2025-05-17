@@ -111,4 +111,4 @@ async def filter_(_, client, update):
 @Sophia.on_message(filters.create(filter_) & ~filters.bot & ~filters.service)
 async def message_handle(_, message):
     # This function never triggered lol
-    print("Join @Hyper_Speed0")
+    print("Join @HeartBeat_Muzic")
