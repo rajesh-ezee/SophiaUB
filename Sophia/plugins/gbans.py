@@ -36,7 +36,7 @@ async def ban_unban_user(message, action, user_id):
 **👤 User:** __{user_id}__
 **🕒 Taken Time:** __{int(time.time() - time_start)}s__
 
-**» 🦋 Join:** __@Hyper_speed0 & @FutureCity005__ ✨🥀
+**» 🦋 Join:** @HeartBeat_Muzic
     """)
 
 
