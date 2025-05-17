@@ -28,18 +28,18 @@ async def send_btns(_, query):
         InlineKeyboardButton("⚙️ Settings", callback_data=f"SophiaPageSettigns")
       ],
       [
-        InlineKeyboardButton("🗂️ GitHub", url=f"https://github.com/Otazuki004/SophiaUB"),
+        InlineKeyboardButton("🗂️ Chat", url=f"https://t.me/HeartBeat_Muzic"),
         InlineKeyboardButton("📖 Help", callback_data=f"helppage:1")
       ],
       [
         InlineKeyboardButton("⚕️ Stats ⚕️", callback_data=f"SophiaStats")
       ],
       [
-        InlineKeyboardButton("👥 Community", url="https://t.me/Hyper_Speed0")
+        InlineKeyboardButton("👥 Deploy", url="https://t.me/Ghostt_Batt")
       ]
     ])
     result = InlineQueryResultPhoto(
-      photo_url="https://i.imgur.com/lgzEDVh.jpeg",
+      photo_url="https://graph.org/file/ffdb1be822436121cf5fd.png",
       caption="""**𝅗ـﮩ٨ـ𝅽𝅾𓆩𝐇𖽞𖽖֯֟፝͢͡𖽸𖾓𝂬𓏲ࣹ᷼𝄢𝂬𝐁𖽞֟֠֯፝͢͡𖽖𖾓𓆪ﮩ٨ـ𝅽𝅾‐𝅘**\n
 **__🍃 𝐇𝐞𝐚𝐫𝐭𝐁𝐞𝐚𝐭-✗-𝐁𝐨𝐭 designed 👾 to automate and simplify your Telegram experience 🦋. 🥀 ✨__**
 
